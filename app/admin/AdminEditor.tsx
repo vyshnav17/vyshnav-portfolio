@@ -37,6 +37,7 @@ type Props = {
   initialContent: Content;
   initialVersion: number;
   isInitialOwner: boolean;
+  initialDbStatus?: { connected: boolean; error?: string };
 };
 
 type Tab =
@@ -56,12 +57,16 @@ export default function AdminEditor({
   initialContent,
   initialVersion,
   isInitialOwner,
+  initialDbStatus,
 }: Props) {
   const [content, setContent] = useState<Content>(initialContent);
   const [version, setVersion] = useState(initialVersion);
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isOwnerState, setIsOwnerState] = useState(isInitialOwner);
+  const [dbStatus, setDbStatus] = useState(
+    initialDbStatus || { connected: false }
+  );
   const [activeTab, setActiveTab] = useState<Tab>("profile");
   const [toast, setToast] = useState<{
     msg: string;
@@ -174,6 +179,7 @@ export default function AdminEditor({
       setContent(data.content);
       setVersion(data.version);
       setIsDirty(false);
+      setDbStatus({ connected: true });
       showToast("All changes published successfully!", "success");
     } catch (err: any) {
       showToast(err.message || "Failed to save portfolio", "error");
@@ -447,6 +453,48 @@ export default function AdminEditor({
                 v{version} Published
               </span>
             )}
+
+            {dbStatus.connected ? (
+              <span
+                className="admin-badge"
+                style={{
+                  background: "rgba(182, 255, 105, 0.12)",
+                  borderColor: "rgba(182, 255, 105, 0.3)",
+                  color: "var(--lime)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "5px",
+                }}
+                title="Connected to MongoDB Atlas"
+              >
+                <span
+                  style={{
+                    width: "6px",
+                    height: "6px",
+                    borderRadius: "50%",
+                    background: "var(--lime)",
+                  }}
+                />
+                MongoDB Live
+              </span>
+            ) : (
+              <span
+                className="admin-badge unsaved"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "5px",
+                  cursor: "pointer",
+                }}
+                title={dbStatus.error || "MongoDB not connected"}
+                onClick={() =>
+                  alert(`Database Status:\n\n${dbStatus.error || "Not connected"}`)
+                }
+              >
+                <AlertCircle size={12} />
+                No Database Connected
+              </span>
+            )}
           </div>
 
           <div className="admin-actions-group">
@@ -501,6 +549,31 @@ export default function AdminEditor({
 
       {/* Main Container */}
       <div className="container">
+        {!dbStatus.connected && (
+          <div
+            style={{
+              background: "rgba(255, 187, 0, 0.08)",
+              border: "1px solid rgba(255, 187, 0, 0.25)",
+              color: "#ffc107",
+              padding: "12px 18px",
+              borderRadius: "8px",
+              marginTop: "20px",
+              fontSize: "13px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+            }}
+          >
+            <AlertCircle size={20} style={{ flexShrink: 0 }} />
+            <div>
+              <strong>Database Warning:</strong> {dbStatus.error || "MongoDB Atlas is not connected yet. Edits cannot persist across Vercel deployments until MONGODB_URI is set."}
+              <div style={{ marginTop: "4px", fontSize: "12px", color: "var(--text)" }}>
+                In Vercel → Project Settings → <strong>Environment Variables</strong>, verify <code>MONGODB_URI</code> and click <strong>Redeploy</strong>.
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="admin-layout-grid">
           {/* Navigation Sidebar */}
           <aside className="admin-sidebar">

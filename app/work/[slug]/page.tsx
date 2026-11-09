@@ -4,7 +4,8 @@ import { ArrowLeft, ArrowUpRight, ArrowRight, Check } from "lucide-react";
 import {getContent} from "@/lib/content";
 import { ProjectVisual } from "@/components/ProjectVisual";
 import { Walkthrough } from "@/components/Interactive";
-export const dynamic="force-dynamic";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props) {
   const slug = (await params).slug; const {projects,site}=await getContent();

@@ -98,3 +98,4 @@ export function createAdminSessionCookie(): string {
 export function clearAdminSessionCookie(): string {
   return `admin_token=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax;`;
 }
+

@@ -19,7 +19,8 @@ import {
   Globe,
 } from "lucide-react";
 import {getContent} from "@/lib/content";
-export const dynamic="force-dynamic";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 import { siteUrl } from "@/data/site";
 import { HeroVisual } from "@/components/HeroVisual";
 

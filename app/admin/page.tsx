@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { readPortfolio } from "@/lib/content";
 import { ownerRequest } from "@/lib/owner";
+import { checkMongoConnection } from "@/lib/mongodb";
 import AdminEditor from "./AdminEditor";
 import "./admin.css";
 
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
 export default async function AdminPage() {
   const { content, version } = await readPortfolio();
   const isOwner = await ownerRequest();
+  const dbStatus = await checkMongoConnection();
 
   return (
     <main id="main" className="admin-page-container">
@@ -24,8 +26,8 @@ export default async function AdminPage() {
         initialContent={content}
         initialVersion={version}
         isInitialOwner={isOwner}
+        initialDbStatus={dbStatus}
       />
     </main>
   );
 }
-

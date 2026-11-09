@@ -56,19 +56,21 @@ async function setVercelKV(version: number, content: Content): Promise<boolean> 
 
 export const readPortfolio = cache(async () => {
   // 1. Try MongoDB Atlas if MONGODB_URI is configured
-  try {
-    const db = await getMongoDb();
-    if (db) {
-      const doc = await db.collection("portfolio").findOne({ _id: "main" as any });
-      if (doc && doc.document) {
-        return {
-          version: (doc.version as number) || 1,
-          content: doc.document as Content,
-        };
+  if (process.env.MONGODB_URI) {
+    try {
+      const db = await getMongoDb();
+      if (db) {
+        const doc = await db.collection("portfolio").findOne({ _id: "main" as any });
+        if (doc && doc.document) {
+          return {
+            version: (doc.version as number) || 1,
+            content: doc.document as Content,
+          };
+        }
       }
+    } catch (err) {
+      console.error("MongoDB read error:", err);
     }
-  } catch (err) {
-    console.error("MongoDB read error:", err);
   }
 
   // 2. Try Vercel KV / Upstash if configured on Vercel
@@ -105,28 +107,36 @@ export async function savePortfolio(document: Content) {
   const nextVersion = (current.version || 0) + 1;
   const docString = JSON.stringify(validated);
 
+  let saved = false;
+  const errors: string[] = [];
+
   // 1. Save to MongoDB Atlas if MONGODB_URI is configured
-  try {
-    const db = await getMongoDb();
-    if (db) {
-      await db.collection("portfolio").updateOne(
-        { _id: "main" as any },
-        {
-          $set: {
-            document: validated,
-            version: nextVersion,
-            updatedAt: new Date(),
+  if (process.env.MONGODB_URI) {
+    try {
+      const db = await getMongoDb();
+      if (db) {
+        await db.collection("portfolio").updateOne(
+          { _id: "main" as any },
+          {
+            $set: {
+              document: validated,
+              version: nextVersion,
+              updatedAt: new Date(),
+            },
           },
-        },
-        { upsert: true }
-      );
+          { upsert: true }
+        );
+        saved = true;
+      }
+    } catch (e: any) {
+      console.error("Failed to save to MongoDB Atlas:", e);
+      errors.push(`MongoDB Atlas error: ${e?.message || e}`);
     }
-  } catch (e) {
-    console.error("Failed to save to MongoDB Atlas:", e);
   }
 
   // 2. Save to Vercel KV / Upstash if configured
-  await setVercelKV(nextVersion, validated);
+  const kvSaved = await setVercelKV(nextVersion, validated);
+  if (kvSaved) saved = true;
 
   // 3. Save to Cloudflare D1 if configured
   try {
@@ -138,8 +148,9 @@ export async function savePortfolio(document: Content) {
       await env.DB.prepare(
         "INSERT INTO portfolio (id, version, document) VALUES (1, ?1, ?2) ON CONFLICT(id) DO UPDATE SET version = excluded.version, document = excluded.document"
       ).bind(nextVersion, docString).run();
+      saved = true;
     }
-  } catch (e) {
+  } catch (e: any) {
     console.error("Failed to save to Cloudflare D1:", e);
   }
 
@@ -150,7 +161,20 @@ export async function savePortfolio(document: Content) {
       const path = await import("node:path");
       const filePath = path.resolve(process.cwd(), "data", "initial.json");
       await fs.writeFile(filePath, JSON.stringify(validated, null, 2), "utf8");
+      saved = true;
     } catch {}
+  }
+
+  // If we had errors attempting to write to the configured database, throw so the user knows!
+  if (errors.length > 0) {
+    throw new Error(errors.join(" | "));
+  }
+
+  // If in production on Vercel and no database was saved to:
+  if (process.env.NODE_ENV === "production" && !saved && !process.env.MONGODB_URI) {
+    throw new Error(
+      "MONGODB_URI is not set in Vercel. In Vercel Project Settings → Environment Variables, add MONGODB_URI and click Redeploy."
+    );
   }
 
   return { version: nextVersion, content: validated };
@@ -158,13 +182,15 @@ export async function savePortfolio(document: Content) {
 
 export async function resetPortfolio() {
   // 1. Reset in MongoDB Atlas
-  try {
-    const db = await getMongoDb();
-    if (db) {
-      await db.collection("portfolio").deleteOne({ _id: "main" as any });
+  if (process.env.MONGODB_URI) {
+    try {
+      const db = await getMongoDb();
+      if (db) {
+        await db.collection("portfolio").deleteOne({ _id: "main" as any });
+      }
+    } catch (e) {
+      console.error("Failed to reset in MongoDB Atlas:", e);
     }
-  } catch (e) {
-    console.error("Failed to reset in MongoDB Atlas:", e);
   }
 
   // 2. Reset in Vercel KV

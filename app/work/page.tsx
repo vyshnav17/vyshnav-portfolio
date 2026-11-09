@@ -1,7 +1,8 @@
 import { ArrowLeft, Github, ArrowUpRight } from "lucide-react";
 import { RepositoryCatalog } from "@/components/RepositoryCatalog";
 import {getContent} from "@/lib/content";
-export const dynamic="force-dynamic";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export async function generateMetadata(){const {site}=await getContent();return {title:site.archiveTitle,description:site.description,alternates:{canonical:"/work/"}}}
 export default async function Archive() { const {profile,site,repositories,sections}=await getContent();
   return (
