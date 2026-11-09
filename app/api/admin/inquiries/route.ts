@@ -38,6 +38,31 @@ export async function GET(req: Request) {
   }
 }
 
+export async function PATCH(req: Request) {
+  const authError = checkMutation(req);
+  if (authError) return authError;
+
+  try {
+    const { id, read } = (await req.json()) as { id?: string; read?: boolean };
+    if (!id) {
+      return Response.json({ error: "Missing inquiry ID." }, { status: 400 });
+    }
+
+    const db = await getMongoDb();
+    if (!db) {
+      return Response.json({ error: "Database not connected." }, { status: 500 });
+    }
+
+    await db
+      .collection("inquiries")
+      .updateOne({ _id: new ObjectId(id) }, { $set: { read: !!read } });
+
+    return Response.json({ success: true });
+  } catch (err: any) {
+    return Response.json({ error: err?.message || "Failed to update inquiry." }, { status: 500 });
+  }
+}
+
 export async function DELETE(req: Request) {
   const authError = checkMutation(req);
   if (authError) return authError;

@@ -70,10 +70,25 @@ export default function AdminEditor({
     initialDbStatus || { connected: false }
   );
   const [activeTab, setActiveTab] = useState<Tab>("profile");
+  const [unreadInquiries, setUnreadInquiries] = useState(0);
   const [toast, setToast] = useState<{
     msg: string;
     type: "success" | "error" | "info";
   } | null>(null);
+
+  // Poll / check unread inquiries count
+  useEffect(() => {
+    if (!isOwnerState) return;
+    fetch("/api/admin/inquiries")
+      .then((res) => res.json())
+      .then((data: any) => {
+        if (data?.inquiries) {
+          const unread = data.inquiries.filter((i: any) => !i.read).length;
+          setUnreadInquiries(unread);
+        }
+      })
+      .catch(() => {});
+  }, [isOwnerState, activeTab]);
 
   // Sub-selections
   const [activeProjectIdx, setActiveProjectIdx] = useState(0);
@@ -682,8 +697,28 @@ export default function AdminEditor({
               className={`admin-tab-btn ${activeTab === "inquiries" ? "active" : ""}`}
               onClick={() => setActiveTab("inquiries")}
             >
-              <span className="admin-tab-inner">
-                <MessageSquare size={16} /> Inbox / Messages
+              <span
+                className="admin-tab-inner"
+                style={{ width: "100%", justifyContent: "space-between" }}
+              >
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                  <MessageSquare size={16} /> Inbox / Messages
+                </span>
+                {unreadInquiries > 0 && (
+                  <span
+                    style={{
+                      background: "var(--lime)",
+                      color: "#0a0a0a",
+                      fontSize: "11px",
+                      fontWeight: 700,
+                      padding: "1px 7px",
+                      borderRadius: "10px",
+                      lineHeight: "16px",
+                    }}
+                  >
+                    {unreadInquiries}
+                  </span>
+                )}
               </span>
             </button>
 
@@ -784,7 +819,11 @@ export default function AdminEditor({
               />
             )}
 
-            {activeTab === "inquiries" && <InquiriesViewer />}
+            {activeTab === "inquiries" && (
+              <InquiriesViewer
+                onCountChange={(count) => setUnreadInquiries(count)}
+              />
+            )}
 
             {activeTab === "site" && (
               <SiteEditor
@@ -2655,11 +2694,16 @@ type Inquiry = {
   read: boolean;
 };
 
-function InquiriesViewer() {
+function InquiriesViewer({
+  onCountChange,
+}: {
+  onCountChange?: (unreadCount: number) => void;
+}) {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   async function fetchInquiries() {
     setLoading(true);
@@ -2668,7 +2712,9 @@ function InquiriesViewer() {
       const res = await fetch("/api/admin/inquiries");
       const data = (await res.json()) as { error?: string; inquiries?: Inquiry[] };
       if (!res.ok) throw new Error(data.error || "Failed to load messages");
-      setInquiries(data.inquiries || []);
+      const list = data.inquiries || [];
+      setInquiries(list);
+      onCountChange?.(list.filter((i) => !i.read).length);
     } catch (e: any) {
       setError(e.message || "Failed to fetch inquiries");
     } finally {
@@ -2680,6 +2726,29 @@ function InquiriesViewer() {
     fetchInquiries();
   }, []);
 
+  async function toggleRead(id: string, currentRead: boolean) {
+    setUpdatingId(id);
+    try {
+      const res = await fetch("/api/admin/inquiries", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, read: !currentRead }),
+      });
+      if (!res.ok) throw new Error("Failed to update status");
+      setInquiries((prev) => {
+        const next = prev.map((item) =>
+          item.id === id ? { ...item, read: !currentRead } : item
+        );
+        onCountChange?.(next.filter((i) => !i.read).length);
+        return next;
+      });
+    } catch (e: any) {
+      alert(e.message);
+    } finally {
+      setUpdatingId(null);
+    }
+  }
+
   async function deleteInquiry(id: string) {
     if (!confirm("Are you sure you want to delete this message?")) return;
     setDeletingId(id);
@@ -2690,7 +2759,11 @@ function InquiriesViewer() {
         body: JSON.stringify({ id }),
       });
       if (!res.ok) throw new Error("Failed to delete message");
-      setInquiries((prev) => prev.filter((item) => item.id !== id));
+      setInquiries((prev) => {
+        const next = prev.filter((item) => item.id !== id);
+        onCountChange?.(next.filter((i) => !i.read).length);
+        return next;
+      });
     } catch (e: any) {
       alert(e.message);
     } finally {
@@ -2713,7 +2786,7 @@ function InquiriesViewer() {
         <div>
           <h2>Contact Form Inbox ({inquiries.length})</h2>
           <p>
-            All messages submitted through your portfolio contact form are automatically saved here in MongoDB.
+            All messages submitted by visitors through your website contact form are saved directly to your database.
           </p>
         </div>
         <button
@@ -2724,28 +2797,6 @@ function InquiriesViewer() {
         >
           {loading ? "Refreshing..." : "Refresh Inbox"}
         </button>
-      </div>
-
-      <div
-        className="admin-item-box"
-        style={{
-          marginBottom: "20px",
-          background: "rgba(182, 255, 105, 0.05)",
-          borderColor: "rgba(182, 255, 105, 0.25)",
-        }}
-      >
-        <h4 style={{ margin: "0 0 6px 0", fontSize: "14px", color: "var(--lime)" }}>
-          📬 Instant Gmail Forwarding (Optional Setup)
-        </h4>
-        <p style={{ margin: 0, fontSize: "13px", color: "var(--muted)", lineHeight: 1.6 }}>
-          All inquiries are already saved here in this dashboard. To also receive them directly in your <strong>v17vyshnavtv@gmail.com</strong> Gmail inbox:
-          <br />
-          1. Go to Google Account &rarr; Security &rarr; <strong>2-Step Verification</strong> &rarr; <strong>App Passwords</strong> (or visit <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noreferrer" style={{ color: "var(--lime)", textDecoration: "underline" }}>myaccount.google.com/apppasswords</a>).
-          <br />
-          2. Type <code>Portfolio</code> as the app name and click <strong>Create</strong> to get a 16-character code (e.g. <code>abcd efgh ijkl mnop</code>).
-          <br />
-          3. In your Vercel Project &rarr; <strong>Settings &rarr; Environment Variables</strong>, add <code>EMAIL_PASS</code> with that 16-character code, then <strong>Redeploy</strong>!
-        </p>
       </div>
 
       {loading ? (
@@ -2779,7 +2830,7 @@ function InquiriesViewer() {
             No messages received yet.
           </p>
           <small style={{ color: "var(--sub)" }}>
-            When someone submits your contact form, their inquiry will appear here instantly.
+            When someone submits your contact form, their message will appear here in real time.
           </small>
         </div>
       ) : (
@@ -2792,6 +2843,8 @@ function InquiriesViewer() {
                 display: "flex",
                 flexDirection: "column",
                 gap: "12px",
+                borderColor: inq.read ? "var(--line)" : "rgba(182, 255, 105, 0.4)",
+                background: inq.read ? "var(--panel)" : "rgba(182, 255, 105, 0.03)",
               }}
             >
               <div
@@ -2804,7 +2857,37 @@ function InquiriesViewer() {
                 }}
               >
                 <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                    {!inq.read ? (
+                      <span
+                        style={{
+                          background: "var(--lime)",
+                          color: "#0a0a0a",
+                          fontSize: "10px",
+                          fontWeight: 700,
+                          padding: "2px 6px",
+                          borderRadius: "4px",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        New
+                      </span>
+                    ) : (
+                      <span
+                        style={{
+                          background: "var(--panel2)",
+                          color: "var(--sub)",
+                          fontSize: "10px",
+                          padding: "2px 6px",
+                          borderRadius: "4px",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        Read
+                      </span>
+                    )}
+
                     <strong style={{ fontSize: "15px", color: "var(--text)" }}>
                       {inq.name}
                     </strong>
@@ -2812,19 +2895,30 @@ function InquiriesViewer() {
                       &lt;{inq.email}&gt;
                     </span>
                   </div>
-                  <div style={{ fontSize: "12px", color: "var(--sub)", marginTop: "3px" }}>
+                  <div style={{ fontSize: "12px", color: "var(--sub)", marginTop: "4px" }}>
                     {new Date(inq.createdAt).toLocaleString()}
                   </div>
                 </div>
 
-                <div style={{ display: "flex", gap: "8px" }}>
+                <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                  <button
+                    className="btn secondary"
+                    style={{ padding: "5px 10px", fontSize: "12px" }}
+                    onClick={() => toggleRead(inq.id, inq.read)}
+                    disabled={updatingId === inq.id}
+                    title={inq.read ? "Mark as Unread" : "Mark as Read"}
+                  >
+                    {inq.read ? "Mark Unread" : "Mark Read"}
+                  </button>
+
                   <a
                     href={`mailto:${inq.email}?subject=Re: ${encodeURIComponent(inq.subject)}`}
                     className="btn secondary"
                     style={{ padding: "5px 12px", fontSize: "12px", textDecoration: "none" }}
                   >
-                    Reply via Email
+                    Reply
                   </a>
+
                   <button
                     className="admin-icon-btn danger"
                     style={{ padding: "5px 10px", fontSize: "12px" }}
