@@ -307,11 +307,24 @@
 
 @media (max-width: 600px) {
   .admin-header-bar {
-    padding: 10px 0;
+    padding: 8px 0;
   }
 
   .admin-bar-inner {
     gap: 8px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .admin-brand-group {
+    min-width: 0;
+    flex-shrink: 1;
+    overflow: hidden;
+    gap: 6px;
+  }
+
+  .admin-actions-group {
+    flex-shrink: 0;
   }
 
   .hide-mobile {
@@ -327,7 +340,8 @@
   .admin-toast {
     left: 16px;
     right: 16px;
-    bottom: 74px;
+    bottom: 84px !important;
+    z-index: 200 !important;
     justify-content: center;
   }
 }

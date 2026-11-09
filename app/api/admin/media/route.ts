@@ -1,4 +1,5 @@
 import { checkMutation } from "@/lib/owner";
+import { getMongoDb } from "@/lib/mongodb";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
 
     const cleanName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
     const uniqueName = `${Date.now()}-${cleanName}`;
-    const buffer = await file.arrayBuffer();
+    const buffer = Buffer.from(await file.arrayBuffer());
 
     // 1. If Cloudflare R2 BUCKET is bound
     const env = await getWorkersEnv();
@@ -37,7 +38,23 @@ export async function POST(req: Request) {
       return Response.json({ url: `/api/media/${uniqueName}` });
     }
 
-    // 2. If running locally on Node
+    // 2. If MongoDB Atlas is connected, store media directly in MongoDB
+    try {
+      const db = await getMongoDb();
+      if (db) {
+        await db.collection("media").insertOne({
+          name: uniqueName,
+          contentType: file.type || "image/png",
+          data: buffer,
+          createdAt: new Date(),
+        });
+        return Response.json({ url: `/api/media/${uniqueName}` });
+      }
+    } catch (dbErr) {
+      console.error("MongoDB media upload error:", dbErr);
+    }
+
+    // 3. If running locally on Node
     if (typeof process !== "undefined" && process.release?.name === "node") {
       try {
         const fs = await import("node:fs/promises");
@@ -45,15 +62,15 @@ export async function POST(req: Request) {
         const uploadsDir = path.resolve(process.cwd(), "public", "uploads");
         await fs.mkdir(uploadsDir, { recursive: true });
         const filePath = path.resolve(uploadsDir, uniqueName);
-        await fs.writeFile(filePath, Buffer.from(buffer));
+        await fs.writeFile(filePath, buffer);
         return Response.json({ url: `/uploads/${uniqueName}` });
       } catch (err) {
         console.error("Local file write error:", err);
       }
     }
 
-    // Fallback: return data URL for immediate preview if storage is not configured
-    const base64 = Buffer.from(buffer).toString("base64");
+    // 4. Fallback: data URL
+    const base64 = buffer.toString("base64");
     const mime = file.type || "image/png";
     return Response.json({ url: `data:${mime};base64,${base64}` });
   } catch (error: any) {

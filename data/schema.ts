@@ -1,10 +1,11 @@
 import {z} from "zod";
-const text=z.string().max(16000);
+const text=z.string().max(2000000);
 const required=text.trim().min(1,"Enter a value.");
 const web=z.string().max(2000).url("Enter a complete https:// address.").regex(/^https?:\/\//i,"Use http or https.");
 const optionalWeb=z.union([z.literal(""),web]);
 const local=/^\/(?!\/)[\w./%-]+$/;
-const asset=text.refine(v=>!v || local.test(v) || /^https:\/\//i.test(v),"Choose an uploaded file or enter an HTTPS URL.");
+const dataUri=/^data:image\/[a-z0-9+.-]+;base64,/i;
+const asset=z.string().max(5000000).refine(v=>!v || local.test(v) || /^https?:\/\//i.test(v) || dataUri.test(v),"Choose an uploaded file, enter an HTTPS URL, or a valid image.");
 const slug=z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/,"Use lowercase letters, numbers and hyphens.");
 const hex=z.string().regex(/^#[a-f\d]{6}$/i,"Use a six-digit hex colour.");
 const list=<T extends z.ZodTypeAny>(item:T)=>z.array(item).max(500);
