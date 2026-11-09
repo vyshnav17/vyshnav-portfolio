@@ -10,4 +10,5 @@ dist/
 .vinext/
 .dev.vars*
 .env
-
+AGENTS.md
+CLAUDE.md

@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
-    "build": "vite build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "dev:cf": "vite --host 127.0.0.1",
+    "build:cf": "vite build",
+    "start:cf": "wrangler dev --config dist/server/wrangler.json --local --ip 127.0.0.1",
     "typecheck": "tsc --noEmit",
-    "start": "wrangler dev --config dist/server/wrangler.json --local --ip 127.0.0.1",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
