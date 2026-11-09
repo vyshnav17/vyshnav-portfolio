@@ -32,6 +32,7 @@ import {
   FileCode,
   Sparkles,
   MessageSquare,
+  Menu,
 } from "lucide-react";
 
 type Props = {
@@ -107,6 +108,38 @@ export default function AdminEditor({
   const [uploadTarget, setUploadTarget] = useState<
     ((url: string) => void) | null
   >(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  function selectTab(t: Tab) {
+    setActiveTab(t);
+    setMobileMenuOpen(false);
+    if (typeof window !== "undefined" && window.innerWidth <= 900) {
+      const el = document.getElementById("admin-content-pane");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }
+
+  const tabsList: {
+    id: Tab;
+    label: string;
+    icon: any;
+    count?: number;
+  }[] = [
+    { id: "profile", label: "Profile & Bio", icon: User },
+    { id: "about", label: "About Me", icon: BookOpen },
+    { id: "projects", label: "Projects", icon: Layers, count: content.projects.length },
+    { id: "repositories", label: "Repositories", icon: FolderGit2, count: content.repositories.length },
+    { id: "experience", label: "Experience", icon: Briefcase, count: content.experience.length },
+    { id: "stack", label: "Tech Stack", icon: Code, count: content.stack.length },
+    { id: "education", label: "Education & Certs", icon: GraduationCap },
+    { id: "sections", label: "Sections & Nav", icon: Sliders },
+    { id: "contact", label: "Contact", icon: Mail },
+    { id: "inquiries", label: "Inbox / Messages", icon: MessageSquare, count: unreadInquiries },
+    { id: "site", label: "Site & Brand", icon: Settings },
+    { id: "json", label: "Raw JSON Backup", icon: FileCode },
+  ];
 
   // Auto-clear toast
   useEffect(() => {
@@ -449,18 +482,27 @@ export default function AdminEditor({
       <header className="admin-header-bar">
         <div className="container admin-bar-inner">
           <div className="admin-brand-group">
-            <a href="/" className="brand" style={{ gap: "8px" }}>
+            <button
+              className="admin-mobile-menu-toggle"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open Navigation Menu"
+            >
+              <Menu size={18} />
+            </button>
+
+            <a href="/" className="brand" style={{ gap: "6px" }}>
               <span style={{ fontWeight: 700, fontSize: "17px" }}>
                 {content.site.brand}
                 <span className="muted">{content.site.brandSuffix}</span>
               </span>
             </a>
-            <span className="admin-badge">Admin Dashboard</span>
+
+            <span className="admin-badge hide-mobile">Admin Dashboard</span>
             {isDirty ? (
-              <span className="admin-badge unsaved">Unsaved changes</span>
+              <span className="admin-badge unsaved">● Unsaved</span>
             ) : (
               <span
-                className="admin-badge"
+                className="admin-badge hide-mobile"
                 style={{
                   background: "rgba(255,255,255,0.06)",
                   borderColor: "var(--line)",
@@ -492,7 +534,7 @@ export default function AdminEditor({
                     background: "var(--lime)",
                   }}
                 />
-                MongoDB Live
+                <span className="hide-mobile">MongoDB</span> Live
               </span>
             ) : (
               <span
@@ -509,41 +551,42 @@ export default function AdminEditor({
                 }
               >
                 <AlertCircle size={12} />
-                No Database Connected
+                <span className="hide-mobile">No DB</span>
               </span>
             )}
           </div>
 
           <div className="admin-actions-group">
-            <button
-              onClick={handleLogout}
-              className="admin-icon-btn danger"
-              style={{ gap: "6px", padding: "6px 12px", fontSize: "13px" }}
-              title="Log out of admin"
-            >
-              <Lock size={14} />
-              <span>Log Out</span>
-            </button>
-
             <a
               href="/"
               target="_blank"
               rel="noreferrer"
-              className="admin-icon-btn"
+              className="admin-icon-btn hide-mobile-sm"
               style={{ gap: "6px", padding: "6px 12px", fontSize: "13px" }}
+              title="View live site"
             >
               <ExternalLink size={14} />
-              View Site
+              <span className="hide-mobile">View Site</span>
             </a>
 
             <button
+              onClick={handleLogout}
+              className="admin-icon-btn danger hide-mobile-sm"
+              style={{ gap: "6px", padding: "6px 12px", fontSize: "13px" }}
+              title="Log out of admin"
+            >
+              <Lock size={14} />
+              <span className="hide-mobile">Log Out</span>
+            </button>
+
+            <button
               onClick={resetAll}
-              className="admin-icon-btn danger"
+              className="admin-icon-btn danger hide-mobile"
               style={{ gap: "6px", padding: "6px 12px", fontSize: "13px" }}
               title="Reset to factory initial.json"
             >
               <RotateCcw size={14} />
-              Reset
+              <span>Reset</span>
             </button>
 
             <button
@@ -551,14 +594,14 @@ export default function AdminEditor({
               disabled={isSaving}
               className="btn primary"
               style={{
-                padding: "8px 18px",
-                fontSize: "14px",
-                gap: "8px",
+                padding: "7px 16px",
+                fontSize: "13px",
+                gap: "6px",
                 boxShadow: isDirty ? "0 0 16px rgba(182, 255, 105, 0.4)" : "none",
               }}
             >
-              <Save size={16} />
-              {isSaving ? "Publishing..." : "Save & Publish"}
+              <Save size={15} />
+              <span>{isSaving ? "Saving..." : isDirty ? "Save" : "Saved"}</span>
             </button>
           </div>
         </div>
@@ -591,158 +634,113 @@ export default function AdminEditor({
           </div>
         )}
 
-        <div className="admin-layout-grid">
-          {/* Navigation Sidebar */}
-          <aside className="admin-sidebar">
-            <button
-              className={`admin-tab-btn ${activeTab === "profile" ? "active" : ""}`}
-              onClick={() => setActiveTab("profile")}
-            >
-              <span className="admin-tab-inner">
-                <User size={16} /> Profile & Bio
-              </span>
-            </button>
-
-            <button
-              className={`admin-tab-btn ${activeTab === "about" ? "active" : ""}`}
-              onClick={() => setActiveTab("about")}
-            >
-              <span className="admin-tab-inner">
-                <BookOpen size={16} /> About Me
-              </span>
-            </button>
-
-            <button
-              className={`admin-tab-btn ${activeTab === "projects" ? "active" : ""}`}
-              onClick={() => setActiveTab("projects")}
-            >
-              <span className="admin-tab-inner">
-                <Layers size={16} /> Projects
-              </span>
-              <span className="admin-tab-count">
-                {content.projects.length}
-              </span>
-            </button>
-
-            <button
-              className={`admin-tab-btn ${
-                activeTab === "repositories" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("repositories")}
-            >
-              <span className="admin-tab-inner">
-                <FolderGit2 size={16} /> Repositories
-              </span>
-              <span className="admin-tab-count">
-                {content.repositories.length}
-              </span>
-            </button>
-
-            <button
-              className={`admin-tab-btn ${
-                activeTab === "experience" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("experience")}
-            >
-              <span className="admin-tab-inner">
-                <Briefcase size={16} /> Experience
-              </span>
-              <span className="admin-tab-count">
-                {content.experience.length}
-              </span>
-            </button>
-
-            <button
-              className={`admin-tab-btn ${activeTab === "stack" ? "active" : ""}`}
-              onClick={() => setActiveTab("stack")}
-            >
-              <span className="admin-tab-inner">
-                <Code size={16} /> Tech Stack
-              </span>
-              <span className="admin-tab-count">{content.stack.length}</span>
-            </button>
-
-            <button
-              className={`admin-tab-btn ${
-                activeTab === "education" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("education")}
-            >
-              <span className="admin-tab-inner">
-                <GraduationCap size={16} /> Education & Certs
-              </span>
-            </button>
-
-            <button
-              className={`admin-tab-btn ${
-                activeTab === "sections" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("sections")}
-            >
-              <span className="admin-tab-inner">
-                <Sliders size={16} /> Sections & Nav
-              </span>
-            </button>
-
-            <button
-              className={`admin-tab-btn ${activeTab === "contact" ? "active" : ""}`}
-              onClick={() => setActiveTab("contact")}
-            >
-              <span className="admin-tab-inner">
-                <Mail size={16} /> Contact
-              </span>
-            </button>
-
-            <button
-              className={`admin-tab-btn ${activeTab === "inquiries" ? "active" : ""}`}
-              onClick={() => setActiveTab("inquiries")}
-            >
-              <span
-                className="admin-tab-inner"
-                style={{ width: "100%", justifyContent: "space-between" }}
+        {/* Mobile Horizontal Quick-Tab Strip */}
+        <div className="admin-mobile-tab-strip">
+          {tabsList.map((t) => {
+            const Icon = t.icon;
+            const isActive = activeTab === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => selectTab(t.id)}
+                className={`admin-mobile-tab-pill ${isActive ? "active" : ""}`}
               >
-                <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                  <MessageSquare size={16} /> Inbox / Messages
+                <Icon size={14} />
+                <span>{t.label}</span>
+                {t.id === "inquiries" && unreadInquiries > 0 ? (
+                  <span className="admin-badge-count unread">{unreadInquiries}</span>
+                ) : t.count !== undefined ? (
+                  <span className="admin-badge-count">{t.count}</span>
+                ) : null}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Backdrop for mobile drawer */}
+        {mobileMenuOpen && (
+          <div
+            className="admin-drawer-backdrop"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+
+        <div className="admin-layout-grid">
+          {/* Navigation Sidebar / Mobile Drawer */}
+          <aside className={`admin-sidebar ${mobileMenuOpen ? "drawer-open" : ""}`}>
+            <div className="admin-drawer-header">
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <Sliders size={18} color="var(--lime)" />
+                <span style={{ fontWeight: 600, fontSize: "16px", color: "var(--text)" }}>
+                  Dashboard Menu
                 </span>
-                {unreadInquiries > 0 && (
-                  <span
-                    style={{
-                      background: "var(--lime)",
-                      color: "#0a0a0a",
-                      fontSize: "11px",
-                      fontWeight: 700,
-                      padding: "1px 7px",
-                      borderRadius: "10px",
-                      lineHeight: "16px",
-                    }}
+              </div>
+              <button
+                className="admin-drawer-close-btn"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="admin-sidebar-nav">
+              {tabsList.map((t) => {
+                const Icon = t.icon;
+                const isActive = activeTab === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    className={`admin-tab-btn ${isActive ? "active" : ""}`}
+                    onClick={() => selectTab(t.id)}
                   >
-                    {unreadInquiries}
-                  </span>
-                )}
-              </span>
-            </button>
+                    <span className="admin-tab-inner">
+                      <Icon size={16} /> {t.label}
+                    </span>
+                    {t.id === "inquiries" && unreadInquiries > 0 ? (
+                      <span
+                        style={{
+                          background: "var(--lime)",
+                          color: "#0a0a0a",
+                          fontSize: "11px",
+                          fontWeight: 700,
+                          padding: "1px 7px",
+                          borderRadius: "10px",
+                          lineHeight: "16px",
+                        }}
+                      >
+                        {unreadInquiries}
+                      </span>
+                    ) : t.count !== undefined ? (
+                      <span className="admin-tab-count">{t.count}</span>
+                    ) : null}
+                  </button>
+                );
+              })}
+            </div>
 
-            <button
-              className={`admin-tab-btn ${activeTab === "site" ? "active" : ""}`}
-              onClick={() => setActiveTab("site")}
-            >
-              <span className="admin-tab-inner">
-                <Settings size={16} /> Site & Brand
-              </span>
-            </button>
-
-            <button
-              className={`admin-tab-btn ${activeTab === "json" ? "active" : ""}`}
-              onClick={() => setActiveTab("json")}
-            >
-              <span className="admin-tab-inner">
-                <FileCode size={16} /> Raw JSON Backup
-              </span>
-            </button>
+            <div className="admin-drawer-footer">
+              <a
+                href="/"
+                target="_blank"
+                rel="noreferrer"
+                className="btn secondary"
+                style={{ width: "100%", justifyContent: "center", textDecoration: "none", fontSize: "13px" }}
+              >
+                <ExternalLink size={14} /> View Live Site
+              </a>
+              <button
+                onClick={handleLogout}
+                className="admin-icon-btn danger"
+                style={{ width: "100%", justifyContent: "center", padding: "8px", fontSize: "13px", gap: "6px" }}
+              >
+                <Lock size={14} /> Log Out
+              </button>
+            </div>
           </aside>
 
           {/* Tab Content Panes */}
-          <main className="admin-content-pane">
+          <main className="admin-content-pane" id="admin-content-pane">
             {activeTab === "profile" && (
               <ProfileEditor
                 profile={content.profile}
@@ -911,6 +909,35 @@ export default function AdminEditor({
           <span style={{ fontSize: "14px" }}>{toast.msg}</span>
         </div>
       )}
+
+      {/* Mobile Sticky Bottom Action Bar */}
+      <div className="admin-mobile-bottom-bar">
+        <button
+          className="admin-bottom-tab-trigger"
+          onClick={() => setMobileMenuOpen(true)}
+          aria-label="Open navigation menu"
+        >
+          <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <Menu size={16} color="var(--lime)" />
+            <strong style={{ color: "var(--text)", fontSize: "13px" }}>
+              {tabsList.find((t) => t.id === activeTab)?.label || "Menu"}
+            </strong>
+          </span>
+          <ChevronUp size={15} style={{ color: "var(--muted)" }} />
+        </button>
+
+        <button
+          onClick={saveAll}
+          disabled={isSaving}
+          className="btn primary admin-bottom-save-btn"
+          style={{
+            boxShadow: isDirty ? "0 0 16px rgba(182, 255, 105, 0.4)" : "none",
+          }}
+        >
+          <Save size={15} />
+          <span>{isSaving ? "Saving..." : isDirty ? "Save & Publish" : "Saved"}</span>
+        </button>
+      </div>
     </div>
   );
 }
