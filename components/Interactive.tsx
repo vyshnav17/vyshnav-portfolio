@@ -2,7 +2,7 @@
 import { useState, useRef, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowDownRight, Minus, Plus } from "lucide-react";
-import { experience } from "@/data/portfolio";
+import type {Content, Project} from "@/data/schema";
 export function Reveal({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
   return (
@@ -44,7 +44,7 @@ export function Magnetic({ children }: { children: ReactNode }) {
     </span>
   );
 }
-export function Timeline() {
+export function Timeline({experience}:{experience:Content["experience"]}) {
   return (
     <div className="timeline">
       {experience.map((e, i) => (
@@ -71,85 +71,8 @@ export function Timeline() {
     </div>
   );
 }
-const roles = [
-  [
-    "Patient",
-    "Intake & access",
-    "Enter symptoms, follow the queue, and access chatbot or telehealth support.",
-  ],
-  [
-    "Doctor",
-    "Clinical assessment",
-    "Review triage information and predictive model outputs during assessment.",
-  ],
-  [
-    "Nurse",
-    "Queue & beds",
-    "Coordinate the patient queue and keep bed availability up to date.",
-  ],
-  [
-    "Administrator",
-    "Resource allocation",
-    "Oversee the queue and available resources across the hospital.",
-  ],
-];
-const modules = [
-  ["Symptom intake", "Queue status", "Telehealth"],
-  ["Triage review", "Predictive models", "Patient queue"],
-  ["Queue routing", "Bed availability"],
-  ["Resource allocation", "Bed tracking", "Queue oversight"],
-];
-const steps = [
-  ["Course activity", "A learner signs in and works through course material."],
-  [
-    "Progress tracking",
-    "Learning activity becomes input for ML-based progress tracking.",
-  ],
-  [
-    "Recommended content",
-    "The system uses behaviour and progress to suggest what to study next.",
-  ],
-];
-export function Walkthrough({ health }: { health: boolean }) {
-  const [i, setI] = useState(0);
-  return (
-    <div className="walkthrough">
-      <div className="mono lime">
-        {health
-          ? "ROLE DASHBOARDS / INTERACTIVE CONCEPT"
-          : "ILLUSTRATIVE LEARNING PATH"}
-      </div>
-      <div className="choices">
-        {(health ? roles : steps).map((v, j) => (
-          <button key={v[0]} aria-pressed={i === j} onClick={() => setI(j)}>
-            {v[0]}
-          </button>
-        ))}
-      </div>
-      <div className="walk-content" aria-live="polite">
-        <ArrowDownRight />
-        <div>
-          <h3>{health ? roles[i][1] : steps[i][0]}</h3>
-          <p>{health ? roles[i][2] : steps[i][1]}</p>
-        </div>
-      </div>
-      {health && (
-        <div className="module-tools" aria-label={roles[i][0] + " modules"}>
-          {modules[i].map((name) => (
-            <span key={name}>
-              <span aria-hidden="true">◇</span>
-              {name}
-            </span>
-          ))}
-        </div>
-      )}
-      {!health && (
-        <div className="step-line" aria-label={"Step " + (i + 1) + " of 3"}>
-          {steps.map((_, j) => (
-            <i className={j <= i ? "on" : ""} key={j} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
+export function Walkthrough({project}:{project:Project}){
+ const [i,setI]=useState(0),item=project.guide[i];
+ if(!item)return null;
+ return <div className="walkthrough"><div className="mono lime">{project.guideTitle}</div><div className="choices">{project.guide.map((g,j)=><button key={j} aria-pressed={i===j} onClick={()=>setI(j)}>{g.label}</button>)}</div><div className="walk-content" aria-live="polite"><ArrowDownRight/><div><h3>{item.title}</h3><p>{item.body}</p></div></div>{item.modules.length>0&&<div className="module-tools">{item.modules.map((m,j)=><span key={j}>◇ {m}</span>)}</div>}{project.progressGuide&&<div className="step-line">{project.guide.map((_,j)=><i key={j} className={j<=i?"on":""}/>)}</div>}</div>
 }

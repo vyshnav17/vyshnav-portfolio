@@ -4,28 +4,28 @@ import { useState } from "react";
 import { Box, UserRound } from "lucide-react";
 import Sculpture from "./Sculpture";
 
-export function HeroVisual() {
+export function HeroVisual({portrait,alt}:{portrait:string;alt:string}) {
   const [wireframe, setWireframe] = useState(false);
   return (
     <div className="hero-visual">
       <div className="hero-visual-stage" id="hero-visual-stage">
-        {wireframe ? (
+        {wireframe || !portrait ? (
           <Sculpture />
         ) : (
           <figure className="portrait">
             <img
-              src="/vyshnav-portrait-880.webp"
-              srcSet="/vyshnav-portrait-480.webp 480w, /vyshnav-portrait-880.webp 880w"
+              src={portrait}
+              srcSet={portrait==="/vyshnav-portrait-880.webp"?"/vyshnav-portrait-480.webp 480w, /vyshnav-portrait-880.webp 880w":undefined}
               sizes="(max-width: 760px) 84vw, (max-width: 1000px) 38vw, 410px"
               width={880}
               height={1100}
-              alt="Portrait of Vyshnav T V wearing glasses and a dark blazer"
+              alt={alt}
               fetchPriority="high"
             />
           </figure>
         )}
       </div>
-      <div className="visual-switch" role="group" aria-label="Hero image">
+      {portrait && <div className="visual-switch" role="group" aria-label="Hero image">
         <button
           type="button"
           aria-controls="hero-visual-stage"
@@ -44,7 +44,7 @@ export function HeroVisual() {
           <Box size={13} />
           Wireframe
         </button>
-      </div>
+      </div>}
     </div>
   );
 }

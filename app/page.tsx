@@ -18,10 +18,11 @@ import {
   Code2,
   Globe,
 } from "lucide-react";
-import { projects, profile, stack, certificates } from "@/data/portfolio";
+import {getContent} from "@/lib/content";
+export const dynamic="force-dynamic";
 import { siteUrl } from "@/data/site";
 import { HeroVisual } from "@/components/HeroVisual";
-import { repositories } from "@/data/repositories";
+
 import { ProjectVisual } from "@/components/ProjectVisual";
 import { Reveal, Timeline, Magnetic } from "@/components/Interactive";
 import { CopyEmail } from "@/components/Chrome";
@@ -57,7 +58,8 @@ function Label({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-export default function Home() {
+export default async function Home() {
+ const {profile,about,projects,repositories,experience,stack,education,certificates,sections,contact,site}=await getContent();
   return (
     <main id="main">
       <script
@@ -68,19 +70,19 @@ export default function Home() {
             "@type": "Person",
             name: profile.name,
             url: siteUrl,
-            image: siteUrl + "/vyshnav-portrait-880.webp",
-            jobTitle: "Aspiring Software Developer",
+            image: profile.portrait ? new URL(profile.portrait,siteUrl).href : undefined,
+            jobTitle: profile.role,
             sameAs: [profile.github, profile.linkedin],
             affiliation: {
               "@type": "EducationalOrganization",
-              name: "Srinivas University",
+              name: about.university,
             },
             knowsAbout: [
               "Full-stack development",
               "Applied AI",
               "Machine learning",
             ],
-          }),
+          }).replace(/</g,"\\u003c"),
         }}
       />
       <section aria-labelledby="intro-title" className="hero">
@@ -89,41 +91,34 @@ export default function Home() {
             <div className="intro">
               <div className="available">
                 <i />
-                Open to software engineering opportunities
+                {profile.status}
               </div>
               <h1 id="intro-title">
-                Vyshnav T V<span>.</span>
+                {profile.name}<span>.</span>
               </h1>
               <div className="role">
-                <span>Software Developer</span>
+                <span>{profile.role}</span>
                 <i />
-                Full-Stack &amp; Applied AI
+                {profile.specialty}
               </div>
-              <h2 className="statement">
-                Turning complex problems into
-                <br className="desktop-break" /> thoughtful digital solutions.
-              </h2>
-              <p className="intro-body">
-                I’m a Computer Science Engineering student building full-stack
-                applications and AI-powered solutions that solve practical
-                problems.
-              </p>
+              <h2 className="statement" style={{whiteSpace:"pre-line"}}>{profile.headline}</h2>
+              <p className="intro-body">{profile.introduction}</p>
               <div className="hero-actions">
                 <Magnetic>
-                  <a href="#work" className="btn primary">
-                    Explore my work <ArrowDownRight size={17} />
+                  <a href={sections.work.visible?"#work":"/work/"} className="btn primary">
+                    {profile.workButton} <ArrowDownRight size={17} />
                   </a>
                 </Magnetic>
                 <Magnetic>
                   <a className="btn secondary" href={profile.resume} download>
                     <Download size={15} />
-                    Download resume
+                    {profile.resumeButton}
                   </a>
                 </Magnetic>
               </div>
               <div className="hero-meta">
                 <span>
-                  <MapPin size={14} /> Kannur, Kerala, India
+                  <MapPin size={14} /> {profile.location}
                 </span>
                 <i />
                 <a href={profile.github} target="_blank" rel="noreferrer">
@@ -138,10 +133,10 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <HeroVisual />
+            <HeroVisual portrait={profile.portrait} alt={profile.portraitAlt}/>
           </div>
           <div className="hero-foot">
-            <a className="scroll-link" href="#work">
+            <a className="scroll-link" href={sections.work.visible?"#work":"/work/"}>
               <ArrowDown size={14} />
               Scroll to explore
             </a>
@@ -149,12 +144,10 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="section container" id="work">
-        <Label>Project index</Label>
+      {sections.work.visible && (<section className="section container" id="work">
+        <Label>{sections.work.label}</Label>
         <div className="section-title-row">
-          <h2>
-            Selected work<span>.</span>
-          </h2>
+          <h2>{sections.work.heading}<span>.</span></h2>
           <a className="text-link archive-link" href="/work/">
             All GitHub projects ({repositories.length}){" "}
             <ArrowUpRight size={16} />
@@ -179,7 +172,7 @@ export default function Home() {
                   </div>
                   <h3>
                     <a href={"/work/" + p.slug + "/"}>
-                      {i === 0 ? p.title : p.short}
+                      {p.short || p.title}
                     </a>
                   </h3>
                   <p>{p.description}</p>
@@ -198,67 +191,46 @@ export default function Home() {
         </div>
         <a className="archive-strip" href="/work/">
           <span>
-            <Github size={20} /> GitHub project archive
+            <Github size={20} /> {site.archiveLabel}
           </span>
           <span>
             {repositories.length} repositories <ArrowUpRight size={17} />
           </span>
         </a>
-      </section>
-      <section id="about" className="section container ruled">
-        <Label>About</Label>
+      </section>)}
+      {sections.about.visible && (<section id="about" className="section container ruled">
+        <Label>{sections.about.label}</Label>
         <div className="section-title-row">
-          <h2>
-            Behind the work<span>.</span>
-          </h2>
+          <h2>{sections.about.heading}<span>.</span></h2>
         </div>
         <div className="about-grid">
-          <p className="about-lead">
-            I’m Vyshnav, a Computer Science Engineering student interested in
-            what makes useful software work.
-          </p>
-          <div className="about-copy">
-            <p>
-              At Srinivas University, I’m studying the foundations of computer
-              science while building full-stack applications and exploring
-              applied AI. I enjoy turning a practical problem into a working
-              system, from its database to the interface people use.
-            </p>
-            <p>
-              Freelance work, internships, and academic projects have given me a
-              place to put that learning into practice. I’m looking for software
-              engineering opportunities where I can keep building and learning.
-            </p>
-            <div className="about-facts">
+          <p className="about-lead">{about.introduction}</p>
+          <div className="about-copy">{about.paragraphs.map((p,i)=><p key={i}>{p}</p>)}<div className="about-facts">
               <span>
-                <GraduationCap size={16} /> Srinivas University
+                <GraduationCap size={16} /> {about.university}
               </span>
               <span>
-                <MapPin size={16} /> Kannur, Kerala
+                <MapPin size={16} /> {about.location}
               </span>
             </div>
           </div>
         </div>
-      </section>
-      <section className="section container ruled" id="experience">
-        <Label>Experience</Label>
+      </section>)}
+      {sections.experience.visible && (<section className="section container ruled" id="experience">
+        <Label>{sections.experience.label}</Label>
         <div className="section-title-row">
-          <h2>
-            Field experience<span>.</span>
-          </h2>
+          <h2>{sections.experience.heading}<span>.</span></h2>
         </div>
-        <Timeline />
-      </section>
-      <section id="stack" className="section container ruled">
-        <Label>Tech stack</Label>
+        <Timeline experience={experience}/>
+      </section>)}
+      {sections.stack.visible && (<section id="stack" className="section container ruled">
+        <Label>{sections.stack.label}</Label>
         <div className="section-title-row">
-          <h2>
-            Tools of the trade<span>.</span>
-          </h2>
+          <h2>{sections.stack.heading}<span>.</span></h2>
         </div>
         <div className="stack-grid">
-          {stack.map(([cat, items], i) => {
-            const Icon = categoryIcons[i];
+          {stack.map(({title:cat,technologies:items}, i) => {
+            const Icon = categoryIcons[i%categoryIcons.length];
             return (
               <div className="stack-card" key={cat}>
                 <Icon size={22} />
@@ -285,31 +257,15 @@ export default function Home() {
             );
           })}
         </div>
-      </section>
-      <section id="education" className="section container ruled">
-        <Label>Education &amp; certifications</Label>
+      </section>)}
+      {sections.education.visible && (<section id="education" className="section container ruled">
+        <Label>{sections.education.label}</Label>
         <div className="section-title-row">
-          <h2>
-            Learning foundations<span>.</span>
-          </h2>
+          <h2>{sections.education.heading}<span>.</span></h2>
         </div>
-        <div className="edu-grid">
-          <div>
-            <GraduationCap />
-            <span className="mono">SEP 2023 — PRESENT</span>
-            <h3>B.Tech in Computer Science Engineering</h3>
-            <p>Srinivas University · Mangaluru, Karnataka</p>
-          </div>
-          <div>
-            <Globe />
-            <span className="mono">OCT 2023 — PRESENT</span>
-            <h3>CCBP 4.0 Full-Stack Development Program</h3>
-            <p>NxtWave CCBP 4.0 Academy · Remote</p>
-          </div>
-        </div>
-        <h3 className="cert-title">Certifications</h3>
+        <div className="edu-grid">{education.map((e,i)=><div key={i}>{i===0?<GraduationCap/>:<Globe/>}<span className="mono">{e.period}</span><h3>{e.title}</h3><p>{e.institution}</p></div>)}</div><h3 className="cert-title">Certifications</h3>
         <div className="cert-grid">
-          {certificates.map(([issuer, cert]) => (
+          {certificates.map(({issuer,title:cert}) => (
             <article key={cert}>
               <Award size={19} />
               <div>
@@ -319,18 +275,17 @@ export default function Home() {
             </article>
           ))}
         </div>
-      </section>
-      <section id="contact" className="contact">
+      </section>)}
+      {sections.contact.visible && (<section id="contact" className="contact">
         <div className="container">
-          <Label>Get in touch</Label>
+          <Label>{sections.contact.label}</Label>
           <h2>
-            Have something interesting
-            <br /> in mind? <span>Let’s build it.</span>
+            {contact.heading} <span>{contact.highlight}</span>
           </h2>
           <div className="contact-email">
             <Mail size={19} />
             <a href={"mailto:" + profile.email}>{profile.email}</a>
-            <CopyEmail />
+            <CopyEmail email={profile.email}/>
           </div>
           <div className="contact-links">
             <a href={profile.github} target="_blank" rel="noreferrer">
@@ -340,11 +295,11 @@ export default function Home() {
               <Linkedin size={16} /> LinkedIn <ArrowUpRight size={13} />
             </a>
             <a href={profile.resume} download>
-              <Download size={15} /> Download resume
+              <Download size={15} /> {profile.resumeButton}
             </a>
           </div>
         </div>
-      </section>
+      </section>)}
     </main>
   );
 }

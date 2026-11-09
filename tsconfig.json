@@ -26,7 +26,12 @@
         "./*"
       ]
     },
-    "allowJs": true
+    "allowJs": true,
+    "types": [
+      "node",
+      "@cloudflare/workers-types",
+      "vite/client"
+    ]
   },
   "include": [
     "next-env.d.ts",
@@ -36,6 +41,11 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
+    ".wrangler",
+    ".vinext",
+    "out",
+    ".next"
   ]
 }

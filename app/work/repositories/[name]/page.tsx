@@ -7,16 +7,15 @@ import {
   FileText,
   Github,
 } from "lucide-react";
-import { repositories, repositoryPath, repoLabels } from "@/data/repositories";
+import {getContent} from "@/lib/content";
+import { repositoryPath, repoLabels } from "@/data/repositories";
 
-const entries = repositories.filter((r) => !r.caseStudy);
-export function generateStaticParams() {
-  return entries.map((r) => ({ name: r.name.toLowerCase() }));
-}
+export const dynamic="force-dynamic";
 type Props = { params: Promise<{ name: string }> };
 async function getRepository(params: Props["params"]) {
   const { name } = await params;
-  const repo = entries.find((r) => r.name.toLowerCase() === name);
+  const {repositories}=await getContent();
+  const repo = repositories.filter(r=>!r.caseStudy).find((r) => r.name.toLowerCase() === name);
   if (!repo) notFound();
   return repo;
 }

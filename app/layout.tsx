@@ -1,27 +1,42 @@
 import type { Metadata } from "next";
 import { Header, Footer, Cursor } from "@/components/Chrome";
 import { siteUrl } from "@/data/site";
+import { getContent } from "@/lib/content";
+import { ownerRequest } from "@/lib/owner";
 import "@fontsource-variable/geist";
 import "@fontsource/ibm-plex-mono/latin-400.css";
 import "./globals.css";
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: "Vyshnav T V — Software Developer",
-    template: "%s | Vyshnav T V",
-  },
-  description:
-    "Full-stack development and applied AI projects by Vyshnav T V, a Computer Science Engineering student in Kannur, Kerala.",
-  openGraph: {
-    type: "website",
-    siteName: "Vyshnav T V",
-    title: "Vyshnav T V — Software Developer",
-    description: "Selected work in full-stack engineering and applied AI.",
-    images: ["/social-card.png"],
-  },
-  twitter: { card: "summary_large_image", images: ["/social-card.png"] },
-};
-export default function Layout({ children }: { children: React.ReactNode }) {
+
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { site } = await getContent();
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: site.title,
+      template: `%s | ${site.brand}`,
+    },
+    description: site.description,
+    openGraph: {
+      type: "website",
+      siteName: site.brand,
+      title: site.title,
+      description: site.description,
+      images: [site.socialImage],
+    },
+    twitter: { card: "summary_large_image", images: [site.socialImage] },
+  };
+}
+
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  const content = await getContent();
+  const owner = await ownerRequest();
+  const navigation = Object.entries(content.sections)
+    .filter(([_, s]) => s.visible)
+    .map(([id, s]) => [id, s.menuLabel]);
+  const showContact = content.sections.contact.visible;
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -36,9 +51,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <a href="#main" className="skip">
           Skip to content
         </a>
-        <Header />
+        <Header navigation={navigation} site={content.site} showContact={showContact} />
         {children}
-        <Footer />
+        <Footer footer={content.site.footer} owner={owner} />
         <Cursor />
       </body>
     </html>

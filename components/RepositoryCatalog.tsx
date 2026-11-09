@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import { ArrowUpRight, GitFork, Github, Search } from "lucide-react";
-import { repositories, repositoryPath, repoLabels } from "@/data/repositories";
+import type {Repository} from "@/data/schema";
+import { repositoryPath, repoLabels } from "@/data/repositories";
 
-export function RepositoryCatalog() {
+export function RepositoryCatalog({repositories}:{repositories:Repository[]}) {
   const [filter, setFilter] = useState("all"),
     [term, setTerm] = useState("");
   const filters = [

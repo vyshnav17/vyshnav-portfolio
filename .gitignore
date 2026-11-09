@@ -4,3 +4,10 @@ out/
 .sites-runtime/
 *.tsbuildinfo
 .env*.local
+
+dist/
+.wrangler/
+.vinext/
+.dev.vars*
+.env
+

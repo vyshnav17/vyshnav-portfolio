@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
-import { projects } from "@/data/portfolio";
-import { repositories, repositoryPath } from "@/data/repositories";
+import {getContent} from "@/lib/content";
+import { repositoryPath } from "@/data/repositories";
 import { siteUrl } from "@/data/site";
-export const dynamic = "force-static";
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = "force-dynamic";
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+ const {projects,repositories}=await getContent();
   const paths = [
     "/",
     "/work/",

@@ -1,15 +1,13 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, ArrowRight, Check } from "lucide-react";
-import { projects } from "@/data/portfolio";
-import { ProjectVisual, screens } from "@/components/ProjectVisual";
+import {getContent} from "@/lib/content";
+import { ProjectVisual } from "@/components/ProjectVisual";
 import { Walkthrough } from "@/components/Interactive";
-export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
-}
+export const dynamic="force-dynamic";
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props) {
-  const slug = (await params).slug;
+  const slug = (await params).slug; const {projects,site}=await getContent();
   const project = projects.find((x) => x.slug === slug);
   if (!project) return {};
   return {
@@ -19,12 +17,12 @@ export async function generateMetadata({ params }: Props) {
     openGraph: {
       title: project.title,
       description: project.description,
-      images: [screens[slug].image],
+      images: [project.image || site.socialImage],
     },
   };
 }
 export default async function CaseStudy({ params }: Props) {
-  const { slug } = await params;
+  const {slug}=await params; const {projects}=await getContent();
   const i = projects.findIndex((p) => p.slug === slug);
   if (i < 0) notFound();
   const p = projects[i],
@@ -55,9 +53,9 @@ export default async function CaseStudy({ params }: Props) {
             {p.linkName}
             <ArrowUpRight size={15} />
           </a>
-          {i > 0 && (
+          {p.live && (
             <a
-              href={"https://" + screens[slug].host}
+              href={p.live}
               target="_blank"
               rel="noreferrer"
               className="text-link"
@@ -69,7 +67,7 @@ export default async function CaseStudy({ params }: Props) {
       </div>
       <figure>
         <ProjectVisual project={p} />
-        <figcaption>Product screenshot · {screens[slug].host}</figcaption>
+        <figcaption>Product screenshot · {p.caption}</figcaption>
       </figure>
       <div className="case-columns">
         <aside>
@@ -93,26 +91,25 @@ export default async function CaseStudy({ params }: Props) {
           <section id="implementation">
             <h2>Implementation</h2>
             <ol>
-              {p.implementation.map(([title, body]) => (
+              {p.implementation.map(({title,body}) => (
                 <li key={title}>
                   <h3>{title}</h3>
                   <p>{body}</p>
                 </li>
               ))}
             </ol>
-            {i !== 0 ? (
-              <Walkthrough health={i === 1} />
-            ) : (
+            {p.guide.length>0&&<Walkthrough project={p}/>}
+            {p.additionalImage&&(
               <figure className="builder">
                 <Image
                   width={1440}
                   height={900}
-                  src="/work/travox-builder.webp"
-                  alt="Travox six-step custom trip builder with preferences and estimate"
+                  src={p.additionalImage}
+                  alt={p.additionalCaption}
                   sizes="(max-width:760px) 90vw, 60vw"
                 />
                 <figcaption>
-                  Product screenshot · Custom trip builder
+                  {p.additionalCaption}
                 </figcaption>
               </figure>
             )}

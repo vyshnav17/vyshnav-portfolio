@@ -1,0 +1,912 @@
+{
+  "profile": {
+    "name": "Vyshnav T V",
+    "email": "v17vyshnavtv@gmail.com",
+    "github": "https://github.com/vyshnav17",
+    "linkedin": "https://linkedin.com/in/vyshnav-t-v",
+    "resume": "/Vyshnav-TV-Resume.pdf",
+    "role": "Software Developer",
+    "specialty": "Full-Stack & Applied AI",
+    "status": "Open to software engineering opportunities",
+    "headline": "Turning complex problems into\nthoughtful digital solutions.",
+    "introduction": "I’m a Computer Science Engineering student building full-stack applications and AI-powered solutions that solve practical problems.",
+    "location": "Kannur, Kerala, India",
+    "portrait": "/vyshnav-portrait-880.webp",
+    "portraitAlt": "Portrait of Vyshnav T V wearing glasses and a dark blazer",
+    "workButton": "Explore my work",
+    "resumeButton": "Download resume"
+  },
+  "about": {
+    "introduction": "I’m Vyshnav, a Computer Science Engineering student interested in what makes useful software work.",
+    "paragraphs": [
+      "At Srinivas University, I’m studying the foundations of computer science while building full-stack applications and exploring applied AI. I enjoy turning a practical problem into a working system, from its database to the interface people use.",
+      "Freelance work, internships, and academic projects have given me a place to put that learning into practice. I’m looking for software engineering opportunities where I can keep building and learning."
+    ],
+    "university": "Srinivas University",
+    "location": "Kannur, Kerala"
+  },
+  "projects": [
+    {
+      "slug": "travox",
+      "title": "Travox Travel Hub",
+      "short": "Travox",
+      "category": "Full-stack / Freelance",
+      "period": "July – August 2026",
+      "description": "A travel planning platform that connects custom itineraries, road-distance quotations, and lead management in one workflow.",
+      "problem": "Planning a custom tour involves several handoffs. Destinations, road distances, vehicle choices, and pricing all have to agree before a travel operator can send a quote.",
+      "solution": "I built a trip builder and an administrative workspace that use the same trip details, from a traveller’s first route selection to the operator’s WhatsApp quotation.",
+      "tech": [
+        "Next.js",
+        "Prisma ORM",
+        "MongoDB",
+        "OpenStreetMap",
+        "Nominatim",
+        "OSRM"
+      ],
+      "implementation": [
+        {
+          "title": "Configure",
+          "body": "A multi-step builder captures the itinerary and vehicle. Nominatim finds the places selected by the traveller."
+        },
+        {
+          "title": "Calculate",
+          "body": "OSRM computes road distances. The rental logic applies the selected vehicle’s pricing tiers to the route."
+        },
+        {
+          "title": "Follow up",
+          "body": "Prisma connects the Next.js application to MongoDB. The CRM brings leads, quote sharing, and margin tracking into the operator’s workspace."
+        }
+      ],
+      "features": [
+        "Custom trip and vehicle selection",
+        "Distance-based rental quotations",
+        "Lead CRM and profit tracking",
+        "One-click WhatsApp quotations",
+        "CMS for packages, pricing, and reviews"
+      ],
+      "link": "https://travox-rho.vercel.app/",
+      "linkName": "Visit live site",
+      "image": "/work/travox.webp",
+      "additionalImage": "/work/travox-builder.webp",
+      "additionalCaption": "Custom trip builder",
+      "guideTitle": "",
+      "progressGuide": false,
+      "live": "",
+      "imageAlt": "Travox homepage with a touring vehicle and travel planning options",
+      "caption": "travox-rho.vercel.app",
+      "guide": []
+    },
+    {
+      "slug": "hospital-system",
+      "title": "AI-Powered Government Hospital Queue & Resource Management System",
+      "short": "Hospital queue & resource management",
+      "category": "Applied AI / Healthcare",
+      "period": "May – June 2026",
+      "description": "A Django application connecting four hospital roles through assisted triage, queue routing, and bed availability.",
+      "problem": "Patients, clinicians, nurses, and administrators need different views of the same hospital workflow. Queue decisions depend on triage information and the resources available.",
+      "solution": "During my AI & ML internship, I built role-based dashboards that connect patient intake with predictive models, queue management, and resource tracking.",
+      "tech": [
+        "Django",
+        "Scikit-learn",
+        "Pandas",
+        "NumPy",
+        "SQLite"
+      ],
+      "implementation": [
+        {
+          "title": "Intake",
+          "body": "A patient-facing module brings together symptom input, chatbot support, and telehealth functionality."
+        },
+        {
+          "title": "Assess",
+          "body": "Predictive health models and assisted triage support the clinical workflow in the doctor dashboard."
+        },
+        {
+          "title": "Coordinate",
+          "body": "Nursing and administrative modules connect queues, bed tracking, and resource allocation through a Django application backed by SQLite."
+        }
+      ],
+      "features": [
+        "Patient, doctor, nurse, and administrator modules",
+        "AI-assisted symptom and trauma triage",
+        "Predictive health models",
+        "Smart queue routing and bed tracking",
+        "AI chatbot and telehealth functionality"
+      ],
+      "link": "https://github.com/vyshnav17/AI-based-Govt-Hospital-Smart-queue-and-Resource-Management-System",
+      "linkName": "View repository",
+      "additionalImage": "",
+      "additionalCaption": "",
+      "guideTitle": "Role dashboards / Interactive concept",
+      "progressGuide": false,
+      "live": "https://ai-based-govt-hospital-smart-queue.vercel.app",
+      "image": "/work/hospital.webp",
+      "imageAlt": "SmartCare AI hospital platform homepage",
+      "caption": "ai-based-govt-hospital-smart-queue.vercel.app",
+      "guide": [
+        {
+          "label": "Patient",
+          "title": "Intake & access",
+          "body": "Enter symptoms, follow the queue, and access chatbot or telehealth support.",
+          "modules": [
+            "Symptom intake",
+            "Queue status",
+            "Telehealth"
+          ]
+        },
+        {
+          "label": "Doctor",
+          "title": "Clinical assessment",
+          "body": "Review triage information and predictive model outputs during assessment.",
+          "modules": [
+            "Triage review",
+            "Predictive models",
+            "Patient queue"
+          ]
+        },
+        {
+          "label": "Nurse",
+          "title": "Queue & beds",
+          "body": "Coordinate the patient queue and keep bed availability up to date.",
+          "modules": [
+            "Queue routing",
+            "Bed availability"
+          ]
+        },
+        {
+          "label": "Administrator",
+          "title": "Resource allocation",
+          "body": "Oversee the queue and available resources across the hospital.",
+          "modules": [
+            "Resource allocation",
+            "Bed tracking",
+            "Queue oversight"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "personalised-learning",
+      "title": "AI-Personalised Learning Management System",
+      "short": "Personalised learning platform",
+      "category": "AI/ML / Education technology",
+      "period": "December 2025 – January 2026",
+      "description": "An academic mini project that uses learning activity and course progress to recommend what a learner could study next.",
+      "problem": "A fixed course list offers little guidance about what to study next. Learners need a path that takes their activity and progress into account.",
+      "solution": "I connected authentication and course management with ML-based progress tracking to generate recommendations from learner behaviour.",
+      "tech": [
+        "React",
+        "NestJS",
+        "Prisma ORM",
+        "SQLite",
+        "Vite",
+        "Tailwind CSS"
+      ],
+      "implementation": [
+        {
+          "title": "Identify",
+          "body": "Authentication associates course activity with an individual learner."
+        },
+        {
+          "title": "Track",
+          "body": "Course management and progress tracking record how the learner moves through the material."
+        },
+        {
+          "title": "Recommend",
+          "body": "The recommendation workflow uses learning behaviour to suggest relevant content."
+        }
+      ],
+      "features": [
+        "User authentication",
+        "Course management",
+        "ML-based progress tracking",
+        "Behaviour-based recommendations"
+      ],
+      "link": "https://github.com/vyshnav17/AI-personalised-LMS",
+      "linkName": "View repository",
+      "additionalImage": "",
+      "additionalCaption": "",
+      "guideTitle": "Illustrative learning path",
+      "progressGuide": true,
+      "live": "https://ai-personalised-lms.vercel.app",
+      "image": "/work/lms.webp",
+      "imageAlt": "AI-Personalised LMS welcome screen with login and registration",
+      "caption": "ai-personalised-lms.vercel.app",
+      "guide": [
+        {
+          "label": "Course activity",
+          "title": "Course activity",
+          "body": "A learner signs in and works through course material.",
+          "modules": []
+        },
+        {
+          "label": "Progress tracking",
+          "title": "Progress tracking",
+          "body": "Learning activity becomes input for ML-based progress tracking.",
+          "modules": []
+        },
+        {
+          "label": "Recommended content",
+          "title": "Recommended content",
+          "body": "The system uses behaviour and progress to suggest what to study next.",
+          "modules": []
+        }
+      ]
+    }
+  ],
+  "repositories": [
+    {
+      "name": "ACEhackthon",
+      "title": "JobReady.AI",
+      "category": "Career planning",
+      "summary": "A career-planning app with skill-gap assessments, learning roadmaps, and mock interviews.",
+      "url": "https://github.com/vyshnav17/ACEhackthon",
+      "language": "TypeScript",
+      "status": "source",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/ACEhackthon/blob/main/README.md"
+        },
+        {
+          "name": "client",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/ACEhackthon/tree/main/client"
+        },
+        {
+          "name": "server",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/ACEhackthon/tree/main/server"
+        }
+      ],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "AI-based-Govt-Hospital-Smart-queue-and-Resource-Management-System",
+      "title": "SmartCare AI",
+      "category": "Healthcare",
+      "summary": "A Django hospital project connecting patient queues, bed availability, and triage across four role-based portals.",
+      "url": "https://github.com/vyshnav17/AI-based-Govt-Hospital-Smart-queue-and-Resource-Management-System",
+      "language": "HTML",
+      "status": "source",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/AI-based-Govt-Hospital-Smart-queue-and-Resource-Management-System/blob/main/README.md"
+        },
+        {
+          "name": "project_AI",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/AI-based-Govt-Hospital-Smart-queue-and-Resource-Management-System/tree/main/project_AI"
+        }
+      ],
+      "live": "https://ai-based-govt-hospital-smart-queue.vercel.app",
+      "caseStudy": "/work/hospital-system/",
+      "upstream": "",
+      "screenshot": ""
+    },
+    {
+      "name": "AI-personalised-LMS",
+      "title": "AI-Personalised LMS",
+      "category": "Education",
+      "summary": "A React and NestJS learning platform with authentication, course management, and progress tracking.",
+      "url": "https://github.com/vyshnav17/AI-personalised-LMS",
+      "language": "TypeScript",
+      "status": "source",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/AI-personalised-LMS/blob/main/README.md"
+        },
+        {
+          "name": "backend",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/AI-personalised-LMS/tree/main/backend"
+        },
+        {
+          "name": "frontend",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/AI-personalised-LMS/tree/main/frontend"
+        }
+      ],
+      "live": "https://ai-personalised-lms.vercel.app",
+      "caseStudy": "/work/personalised-learning/",
+      "upstream": "",
+      "screenshot": ""
+    },
+    {
+      "name": "CarRentalSystem",
+      "title": "Prestige Wheels Car Rental",
+      "category": "Transport",
+      "summary": "A Java web application with a vehicle catalogue, rental requests, and a MySQL database connection.",
+      "url": "https://github.com/vyshnav17/CarRentalSystem",
+      "language": "Java",
+      "status": "source",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/CarRentalSystem/blob/main/README.md"
+        },
+        {
+          "name": "com",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/CarRentalSystem/tree/main/com"
+        },
+        {
+          "name": "src",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/CarRentalSystem/tree/main/src"
+        }
+      ],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "hayat-foodies-landing",
+      "title": "Hayat Foods Bakery",
+      "category": "Web development",
+      "summary": "A Kannur bakery website with a product catalogue, gallery, customer reviews, and contact features.",
+      "url": "https://github.com/vyshnav17/hayat-foodies-landing",
+      "language": "TypeScript",
+      "status": "source",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/hayat-foodies-landing/blob/main/README.md"
+        },
+        {
+          "name": "api",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/hayat-foodies-landing/tree/main/api"
+        },
+        {
+          "name": "prisma",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/hayat-foodies-landing/tree/main/prisma"
+        },
+        {
+          "name": "scripts",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/hayat-foodies-landing/tree/main/scripts"
+        },
+        {
+          "name": "src",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/hayat-foodies-landing/tree/main/src"
+        }
+      ],
+      "live": "https://hayat-foodies-landing.vercel.app",
+      "screenshot": "/work/hayat-foodies-landing.webp",
+      "upstream": "",
+      "caseStudy": ""
+    },
+    {
+      "name": "IBM6thsemProject-AI-powered-Resume-Analyser",
+      "title": "CV AI Insights",
+      "category": "Career tools",
+      "summary": "A résumé analyser and builder with keyword feedback, an analysis history dashboard, and PDF export.",
+      "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser",
+      "language": "JavaScript",
+      "status": "source",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/blob/main/README.md"
+        },
+        {
+          "name": "analyzer-service",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/analyzer-service"
+        },
+        {
+          "name": "api-gateway",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/api-gateway"
+        },
+        {
+          "name": "builder-service",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/builder-service"
+        },
+        {
+          "name": "frontend",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/frontend"
+        },
+        {
+          "name": "notification-service",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/notification-service"
+        },
+        {
+          "name": "report-service",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/report-service"
+        }
+      ],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "WeddingInvitationDigital",
+      "title": "Digital Wedding Invitation",
+      "category": "Web development",
+      "summary": "An interactive wedding invitation with an animated entrance, music player, and RSVP backend.",
+      "url": "https://github.com/vyshnav17/WeddingInvitationDigital",
+      "language": "JavaScript",
+      "status": "source",
+      "files": [
+        {
+          "name": "backend",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/WeddingInvitationDigital/tree/main/backend"
+        },
+        {
+          "name": "frontend",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/WeddingInvitationDigital/tree/main/frontend"
+        }
+      ],
+      "live": "https://wedding-invitation-digital-pi.vercel.app",
+      "screenshot": "/work/weddinginvitationdigital.webp",
+      "upstream": "",
+      "caseStudy": ""
+    },
+    {
+      "name": "AI-powered-resume-analyser",
+      "title": "AI Résumé Analyser",
+      "category": "Career tools",
+      "summary": "A dedicated analysis service extracts résumé text from PDFs, runs AI analysis, and stores the results.",
+      "url": "https://github.com/vyshnav17/AI-powered-resume-analyser",
+      "language": "TypeScript",
+      "status": "source",
+      "files": [
+        {
+          "name": "analyzer-service",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/analyzer-service"
+        },
+        {
+          "name": "api-gateway",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/api-gateway"
+        },
+        {
+          "name": "frontend",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/frontend"
+        },
+        {
+          "name": "notification-service",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/notification-service"
+        },
+        {
+          "name": "report-service",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/report-service"
+        },
+        {
+          "name": "shared",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/shared"
+        },
+        {
+          "name": "user-service",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/user-service"
+        }
+      ],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "teachConnect",
+      "title": "Teach Connect",
+      "category": "Recruitment",
+      "summary": "A Django recruitment portal for educators with candidate registration and Razorpay payment handling.",
+      "url": "https://github.com/vyshnav17/teachConnect",
+      "language": "HTML",
+      "status": "source",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/teachConnect/blob/main/README.md"
+        },
+        {
+          "name": "core",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/teachConnect/tree/main/core"
+        },
+        {
+          "name": "teachconnect",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/teachConnect/tree/main/teachconnect"
+        },
+        {
+          "name": "templates",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/teachConnect/tree/main/templates"
+        }
+      ],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "jurismind-ai-summarizer-pdf",
+      "title": "Juris Mind PDF",
+      "category": "Legal technology",
+      "summary": "A legal document tool that extracts text from uploaded files for multilingual summaries and document Q&A.",
+      "url": "https://github.com/vyshnav17/jurismind-ai-summarizer-pdf",
+      "language": "TypeScript",
+      "status": "source",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/jurismind-ai-summarizer-pdf/blob/main/README.md"
+        },
+        {
+          "name": "src",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/jurismind-ai-summarizer-pdf/tree/main/src"
+        },
+        {
+          "name": "supabase",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/jurismind-ai-summarizer-pdf/tree/main/supabase"
+        }
+      ],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "jurismind-ai-summarizer",
+      "title": "JurisMind AI Summarizer",
+      "category": "Legal technology",
+      "summary": "A legal document interface offering summaries, language options, and document chat.",
+      "url": "https://github.com/vyshnav17/jurismind-ai-summarizer",
+      "language": "TypeScript",
+      "status": "source",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/jurismind-ai-summarizer/blob/main/README.md"
+        },
+        {
+          "name": "src",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/jurismind-ai-summarizer/tree/main/src"
+        },
+        {
+          "name": "supabase",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/jurismind-ai-summarizer/tree/main/supabase"
+        }
+      ],
+      "upstream": "https://github.com/Santhosh-Kumar-R-S/jurismind-ai-summarizer",
+      "live": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "NIPE",
+      "title": "NIPE Legal Summarizer",
+      "category": "Legal technology",
+      "summary": "A legal summarization interface that accepts uploaded documents or pasted text.",
+      "url": "https://github.com/vyshnav17/NIPE",
+      "language": "",
+      "status": "source",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/NIPE/blob/main/README.md"
+        },
+        {
+          "name": "server",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/NIPE/tree/main/server"
+        },
+        {
+          "name": "src",
+          "type": "dir",
+          "url": "https://github.com/vyshnav17/NIPE/tree/main/src"
+        }
+      ],
+      "upstream": "https://github.com/Santhosh-Kumar-R-S/NIPE",
+      "live": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "React",
+      "title": "React Fundamentals",
+      "category": "Learning notes",
+      "summary": "Learning notes on React fundamentals, JSX, and core rendering methods.",
+      "url": "https://github.com/vyshnav17/React",
+      "language": "",
+      "status": "readme",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/React/blob/main/README.md"
+        }
+      ],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "SalaryPredictorKNN",
+      "title": "Salary Predictor KNN",
+      "category": "Project outline",
+      "summary": "The README records the project title. The repository currently contains only that file.",
+      "url": "https://github.com/vyshnav17/SalaryPredictorKNN",
+      "language": "",
+      "status": "readme",
+      "files": [
+        {
+          "name": "README.md",
+          "type": "file",
+          "url": "https://github.com/vyshnav17/SalaryPredictorKNN/blob/main/README.md"
+        }
+      ],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "chatApp",
+      "title": "Chat App",
+      "category": "Repository",
+      "summary": "This repository has no committed files.",
+      "url": "https://github.com/vyshnav17/chatApp",
+      "language": "",
+      "status": "empty",
+      "files": [],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "HayatFoods",
+      "title": "Hayat Foods",
+      "category": "Repository",
+      "summary": "This repository has no committed files. The bakery website is in hayat-foodies-landing.",
+      "url": "https://github.com/vyshnav17/HayatFoods",
+      "language": "",
+      "status": "empty",
+      "files": [],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "IBM-college",
+      "title": "IBM College",
+      "category": "Repository",
+      "summary": "This repository has no committed files.",
+      "url": "https://github.com/vyshnav17/IBM-college",
+      "language": "",
+      "status": "empty",
+      "files": [],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    },
+    {
+      "name": "Job-Ready-AI",
+      "title": "Job Ready AI",
+      "category": "Repository",
+      "summary": "This repository has no committed files. The career-planning application is in ACEhackthon.",
+      "url": "https://github.com/vyshnav17/Job-Ready-AI",
+      "language": "",
+      "status": "empty",
+      "files": [],
+      "live": "",
+      "upstream": "",
+      "caseStudy": "",
+      "screenshot": ""
+    }
+  ],
+  "experience": [
+    {
+      "date": "JUL — AUG 2026",
+      "role": "Freelance Developer",
+      "org": "Travox Travel Hub",
+      "place": "Kannur, Kerala",
+      "body": "Delivered an end-to-end tourism platform with custom trip configuration, automated quotations, road routing, lead CRM, and administration tools.",
+      "type": "Freelance project"
+    },
+    {
+      "date": "MAY — JUN 2026",
+      "role": "AI & ML Intern",
+      "org": "Inexoft Technologies Pvt Ltd",
+      "place": "Kannur, Kerala",
+      "body": "Studied predictive analytics, resource allocation, and automation. Built a four-role government hospital queue and resource management application.",
+      "type": "Internship"
+    },
+    {
+      "date": "JUN — JUL 2025",
+      "role": "Web Development Intern",
+      "org": "Verveox Technologies",
+      "place": "Kollam, Kerala",
+      "body": "Built interactive web pages using HTML, CSS, JavaScript, and Node.js. Implemented authentication and real-time application features with Firebase.",
+      "type": "Internship"
+    }
+  ],
+  "stack": [
+    {
+      "title": "Languages",
+      "technologies": [
+        "Java",
+        "Python",
+        "C++",
+        "JavaScript"
+      ]
+    },
+    {
+      "title": "Frontend",
+      "technologies": [
+        "React.js",
+        "Next.js",
+        "Tailwind CSS",
+        "HTML",
+        "CSS"
+      ]
+    },
+    {
+      "title": "Backend",
+      "technologies": [
+        "Node.js",
+        "Django",
+        "REST APIs"
+      ]
+    },
+    {
+      "title": "Databases & services",
+      "technologies": [
+        "MongoDB",
+        "SQL",
+        "Firebase",
+        "Prisma"
+      ]
+    },
+    {
+      "title": "AI / ML",
+      "technologies": [
+        "Scikit-learn",
+        "Pandas",
+        "NumPy"
+      ]
+    },
+    {
+      "title": "Developer tools",
+      "technologies": [
+        "Git",
+        "Linux"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "title": "B.Tech in Computer Science Engineering",
+      "period": "SEP 2023 — PRESENT",
+      "institution": "Srinivas University · Mangaluru, Karnataka"
+    },
+    {
+      "title": "CCBP 4.0 Full-Stack Development Program",
+      "period": "OCT 2023 — PRESENT",
+      "institution": "NxtWave CCBP 4.0 Academy · Remote"
+    }
+  ],
+  "certificates": [
+    {
+      "issuer": "IBM",
+      "title": "Python for Data Science"
+    },
+    {
+      "issuer": "IBM",
+      "title": "Business Intelligence"
+    },
+    {
+      "issuer": "IBM",
+      "title": "Hadoop"
+    },
+    {
+      "issuer": "Certiport",
+      "title": "Java IT Specialist"
+    },
+    {
+      "issuer": "IT Specialist",
+      "title": "Artificial Intelligence"
+    },
+    {
+      "issuer": "IBM",
+      "title": "Machine Learning using Python"
+    }
+  ],
+  "sections": {
+    "work": {
+      "label": "Project index",
+      "heading": "Selected work",
+      "menuLabel": "Work",
+      "visible": true
+    },
+    "about": {
+      "label": "About",
+      "heading": "Behind the work",
+      "menuLabel": "About",
+      "visible": true
+    },
+    "experience": {
+      "label": "Experience",
+      "heading": "Field experience",
+      "menuLabel": "Experience",
+      "visible": true
+    },
+    "stack": {
+      "label": "Tech stack",
+      "heading": "Tools of the trade",
+      "menuLabel": "Stack",
+      "visible": true
+    },
+    "education": {
+      "label": "Education & certifications",
+      "heading": "Learning foundations",
+      "menuLabel": "Education",
+      "visible": true
+    },
+    "contact": {
+      "label": "Get in touch",
+      "heading": "Contact",
+      "menuLabel": "Contact",
+      "visible": true
+    }
+  },
+  "contact": {
+    "heading": "Have something interesting in mind?",
+    "highlight": "Let’s build it."
+  },
+  "site": {
+    "brand": "vyshnav",
+    "brandSuffix": ".tv",
+    "footer": "© 2026 Vyshnav T V",
+    "title": "Vyshnav T V — Software Developer",
+    "description": "Full-stack development and applied AI projects by Vyshnav T V, a Computer Science Engineering student in Kannur, Kerala.",
+    "socialImage": "/social-card.png",
+    "accentDark": "#b6ff69",
+    "accentLight": "#457509",
+    "archiveTitle": "GitHub projects",
+    "archiveLabel": "GitHub project archive",
+    "contactButton": "Let’s talk"
+  }
+}

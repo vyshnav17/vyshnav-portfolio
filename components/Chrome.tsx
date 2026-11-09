@@ -11,7 +11,7 @@ import {
   Check,
   Copy,
 } from "lucide-react";
-import { navigation, profile } from "@/data/portfolio";
+import type {Content} from "@/data/schema";
 
 export function Mark() {
   return (
@@ -22,7 +22,7 @@ export function Mark() {
     </svg>
   );
 }
-export function Header() {
+export function Header({navigation,site,showContact}:{navigation:string[][];site:Content["site"];showContact:boolean}) {
   const path = usePathname(),
     [theme, setTheme] = useState("dark"),
     [menu, setMenu] = useState(false),
@@ -61,7 +61,7 @@ export function Header() {
       removeEventListener("scroll", scroll);
       removeEventListener("resize", scroll);
     };
-  }, [path]);
+  }, [path,navigation]);
   useEffect(() => {
     if (!menu) return;
     const close = (e: KeyboardEvent) => {
@@ -70,6 +70,8 @@ export function Header() {
     addEventListener("keydown", close);
     return () => removeEventListener("keydown", close);
   }, [menu]);
+
+  if (path.startsWith("/admin")) return null;
   function toggle() {
     const t = theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = t;
@@ -85,12 +87,12 @@ export function Header() {
         <a
           href="/"
           className="brand"
-          aria-label="Vyshnav T V home"
+          aria-label="Portfolio home"
           onClick={() => setMenu(false)}
         >
           <Mark />
           <span>
-            vyshnav<span className="muted">.tv</span>
+            {site.brand}<span className="muted">{site.brandSuffix}</span>
           </span>
         </a>
         <nav
@@ -120,9 +122,9 @@ export function Header() {
           >
             {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
           </button>
-          <a href="/#contact" className="talk" onClick={() => setMenu(false)}>
-            Let’s talk <ArrowUpRight size={15} />
-          </a>
+          {showContact&&<a href="/#contact" className="talk" onClick={() => setMenu(false)}>
+            {site.contactButton} <ArrowUpRight size={15} />
+          </a>}
           <button
             className="menu-button"
             aria-label={menu ? "Close navigation" : "Open navigation"}
@@ -137,7 +139,7 @@ export function Header() {
     </header>
   );
 }
-export function CopyEmail() {
+export function CopyEmail({email}:{email:string}) {
   const [state, setState] = useState("");
   useEffect(() => {
     if (!state) return;
@@ -149,7 +151,7 @@ export function CopyEmail() {
       className="copy"
       onClick={async () => {
         try {
-          await navigator.clipboard.writeText(profile.email);
+          await navigator.clipboard.writeText(email);
           setState("Email copied");
         } catch {
           setState("Select the address to copy");
@@ -162,11 +164,17 @@ export function CopyEmail() {
     </button>
   );
 }
-export function Footer() {
+export function Footer({footer,owner}:{footer:string;owner:boolean}) {
+  const path = usePathname();
+  if (path.startsWith("/admin")) return null;
+
   return (
     <footer>
       <div className="container footer-inner">
-        <span>© 2026 Vyshnav T V</span>
+        <span>{footer}</span>
+        <a href="/admin/" style={{ fontSize: "13px", opacity: 0.65 }}>
+          {owner ? "Edit portfolio" : "Admin"}
+        </a>
         <a href="#top">
           Back to top <ArrowUp size={14} />
         </a>
@@ -184,7 +192,7 @@ export function Cursor() {
       return;
     const dot = document.createElement("div");
     dot.className = "cursor-ring";
-    document.body.append(dot);
+    document.body.appendChild(dot);
     const move = (e: PointerEvent) => {
       const target = e.target as HTMLElement;
       dot.style.transform =

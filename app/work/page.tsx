@@ -1,15 +1,9 @@
 import { ArrowLeft, Github, ArrowUpRight } from "lucide-react";
 import { RepositoryCatalog } from "@/components/RepositoryCatalog";
-import { profile } from "@/data/portfolio";
-import { repositories } from "@/data/repositories";
-
-export const metadata = {
-  title: "GitHub project archive",
-  description:
-    "Browse Vyshnav T V’s public GitHub repositories, source code, and case studies.",
-  alternates: { canonical: "/work/" },
-};
-export default function Archive() {
+import {getContent} from "@/lib/content";
+export const dynamic="force-dynamic";
+export async function generateMetadata(){const {site}=await getContent();return {title:site.archiveTitle,description:site.description,alternates:{canonical:"/work/"}}}
+export default async function Archive() { const {profile,site,repositories,sections}=await getContent();
   return (
     <main id="main" className="container case archive">
       <a className="back" href="/#work">
@@ -18,10 +12,10 @@ export default function Archive() {
       <header className="case-head">
         <div className="section-label">
           <span />
-          Project index
+          {sections.work.label}
         </div>
         <h1>
-          GitHub projects<em>.</em>
+          {site.archiveTitle}<em>.</em>
         </h1>
         <div className="archive-byline">
           <span>{repositories.length} public repositories</span>
@@ -31,11 +25,11 @@ export default function Archive() {
             rel="noreferrer"
           >
             <Github size={15} />
-            @vyshnav17 <ArrowUpRight size={13} />
+            @{new URL(profile.github).pathname.split("/").filter(Boolean).pop()} <ArrowUpRight size={13} />
           </a>
         </div>
       </header>
-      <RepositoryCatalog />
+      <RepositoryCatalog repositories={repositories}/>
     </main>
   );
 }
