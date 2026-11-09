@@ -18,7 +18,7 @@ const project=z.object({
 });
 const repo=z.object({title:required,name:required.regex(/^[\w.-]+$/,"Use a GitHub repository name.").refine(v=>v!=="."&&v!=="..","Enter a repository name."),category:required,summary:text,url:web,language:text,status:z.enum(["source","readme","empty"]),upstream:optionalWeb,live:optionalWeb,caseStudy:text,screenshot:asset,files:list(z.object({name:required,type:z.enum(["file","dir"]),url:web}))});
 export const contentSchema=z.object({
- profile:z.object({name:required,role:required,specialty:text,status:text,headline:required,introduction:text,location:text,portrait:asset,portraitAlt:text,resume:asset,email:z.string().email(),github:web,linkedin:web,workButton:required,resumeButton:required}),
+ profile:z.object({name:required,role:required,specialty:text,status:text,headline:required,introduction:text,location:text,portrait:asset,portraitAlt:text,resume:asset,email:z.string().email(),github:web,linkedin:web,instagram:optionalWeb.default("https://www.instagram.com/vyshnav.tv/"),whatsapp:text.default("+919995329387"),workButton:required,resumeButton:required}),
  about:z.object({introduction:text,paragraphs:strings,university:text,location:text}),
  projects:list(project),repositories:list(repo),
  experience:list(z.object({role:required,org:required,date:text,place:text,type:text,body:text})),
@@ -26,7 +26,7 @@ export const contentSchema=z.object({
  education:list(z.object({title:required,period:text,institution:required})),
  certificates:list(z.object({title:required,issuer:required})),
  sections:z.object({work:section,about:section,experience:section,stack:section,education:section,contact:section}),
- contact:z.object({heading:required,highlight:text}),
+ contact:z.object({heading:required,highlight:text,description:text.default("Have a question, opportunity, or project in mind? Reach out via the form below, WhatsApp, or Instagram."),whatsapp:text.default("+919995329387"),whatsappMessage:text.default("Hi Vyshnav, I came across your portfolio and would like to connect!"),instagram:optionalWeb.default("https://www.instagram.com/vyshnav.tv/")}),
  site:z.object({brand:required,brandSuffix:text,footer:text,title:required,description:text,socialImage:asset,accentDark:hex,accentLight:hex,archiveTitle:required,archiveLabel:required,contactButton:required}),
 });
 export type Content=z.infer<typeof contentSchema>;

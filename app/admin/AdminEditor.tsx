@@ -997,6 +997,27 @@ function ProfileEditor({
 
       <div className="admin-grid-2">
         <div className="admin-form-group">
+          <label className="admin-form-label">Instagram URL</label>
+          <input
+            className="admin-input"
+            placeholder="https://www.instagram.com/vyshnav.tv/"
+            value={profile.instagram || ""}
+            onChange={(e) => set("instagram", e.target.value)}
+          />
+        </div>
+        <div className="admin-form-group">
+          <label className="admin-form-label">WhatsApp Number</label>
+          <input
+            className="admin-input"
+            placeholder="+919995329387"
+            value={profile.whatsapp || ""}
+            onChange={(e) => set("whatsapp", e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="admin-grid-2">
+        <div className="admin-form-group">
           <label className="admin-form-label">Work Button Label</label>
           <input
             className="admin-input"
@@ -2521,40 +2542,87 @@ function ContactEditor({
   return (
     <div className="admin-panel-card">
       <div className="admin-panel-header">
-        <h2>Contact Section</h2>
+        <h2>Contact Section & Inquiries</h2>
         <p>
-          Configure the call-to-action text displayed at the bottom of the
-          portfolio.
+          Configure your contact section heading, subtitle, WhatsApp direct chat, and Instagram link.
         </p>
       </div>
 
-      <div className="admin-form-group">
-        <label className="admin-form-label">Contact Heading</label>
-        <input
-          className="admin-input"
-          value={contact.heading}
-          onChange={(e) => onChange({ ...contact, heading: e.target.value })}
-        />
+      <div className="admin-grid-2">
+        <div className="admin-form-group">
+          <label className="admin-form-label">Contact Heading</label>
+          <input
+            className="admin-input"
+            value={contact.heading}
+            onChange={(e) => onChange({ ...contact, heading: e.target.value })}
+          />
+        </div>
+        <div className="admin-form-group">
+          <label className="admin-form-label">Highlighted Accent Text</label>
+          <input
+            className="admin-input"
+            value={contact.highlight}
+            onChange={(e) => onChange({ ...contact, highlight: e.target.value })}
+          />
+          <span className="admin-help">
+            Renders in accent color (e.g. &quot;Let’s build it.&quot;).
+          </span>
+        </div>
       </div>
 
       <div className="admin-form-group">
-        <label className="admin-form-label">Highlighted Accent Text</label>
-        <input
-          className="admin-input"
-          value={contact.highlight}
-          onChange={(e) => onChange({ ...contact, highlight: e.target.value })}
+        <label className="admin-form-label">Description / Subtitle</label>
+        <textarea
+          className="admin-textarea"
+          value={contact.description || ""}
+          onChange={(e) => onChange({ ...contact, description: e.target.value })}
+          placeholder="Have a question, opportunity, or project in mind? Reach out via the form below, WhatsApp, or Instagram."
+        />
+      </div>
+
+      <div className="admin-grid-2">
+        <div className="admin-form-group">
+          <label className="admin-form-label">WhatsApp Number</label>
+          <input
+            className="admin-input"
+            placeholder="+919995329387"
+            value={contact.whatsapp || ""}
+            onChange={(e) => onChange({ ...contact, whatsapp: e.target.value })}
+          />
+          <span className="admin-help">Include country code (e.g. +919995329387).</span>
+        </div>
+        <div className="admin-form-group">
+          <label className="admin-form-label">Instagram Profile URL</label>
+          <input
+            className="admin-input"
+            placeholder="https://www.instagram.com/vyshnav.tv/"
+            value={contact.instagram || ""}
+            onChange={(e) => onChange({ ...contact, instagram: e.target.value })}
+          />
+        </div>
+      </div>
+
+      <div className="admin-form-group">
+        <label className="admin-form-label">WhatsApp Preloaded Message</label>
+        <textarea
+          className="admin-textarea"
+          style={{ minHeight: "65px" }}
+          value={contact.whatsappMessage || ""}
+          onChange={(e) =>
+            onChange({ ...contact, whatsappMessage: e.target.value })
+          }
+          placeholder="Hi Vyshnav, I came across your portfolio and would like to connect!"
         />
         <span className="admin-help">
-          Renders in accent color (e.g. &quot;Let’s build it.&quot;).
+          Message that automatically pre-fills in WhatsApp when a visitor clicks the WhatsApp chat card.
         </span>
       </div>
 
       <div className="admin-item-box" style={{ marginTop: "16px" }}>
         <p style={{ fontSize: "14px", color: "var(--muted)" }}>
-          Contact recipient address: <strong>{email}</strong>
+          Contact form submissions are sent to: <strong>{email}</strong>
           <br />
-          To update your email or social accounts (GitHub, LinkedIn), visit the{" "}
-          <strong>Profile & Bio</strong> tab.
+          Messages sent through the website contact form are also automatically stored in your MongoDB database in the <strong>inquiries</strong> collection.
         </p>
       </div>
     </div>

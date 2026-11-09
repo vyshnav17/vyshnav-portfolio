@@ -4,6 +4,8 @@
     "email": "v17vyshnavtv@gmail.com",
     "github": "https://github.com/vyshnav17",
     "linkedin": "https://linkedin.com/in/vyshnav-t-v",
+    "instagram": "https://www.instagram.com/vyshnav.tv/",
+    "whatsapp": "+919995329387",
     "resume": "/Vyshnav-TV-Resume.pdf",
     "role": "Software Developer",
     "specialty": "Full-Stack & Applied AI",
@@ -894,7 +896,11 @@
   },
   "contact": {
     "heading": "Have something interesting in mind?",
-    "highlight": "Let’s build it."
+    "highlight": "Let’s build it.",
+    "description": "Have a question, opportunity, or project in mind? Send a message below or connect with me directly on WhatsApp or Instagram.",
+    "whatsapp": "+919995329387",
+    "whatsappMessage": "Hi Vyshnav, I came across your portfolio and would like to connect!",
+    "instagram": "https://www.instagram.com/vyshnav.tv/"
   },
   "site": {
     "brand": "vyshnav",
