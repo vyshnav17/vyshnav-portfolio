@@ -31,6 +31,7 @@ import {
   X,
   FileCode,
   Sparkles,
+  MessageSquare,
 } from "lucide-react";
 
 type Props = {
@@ -50,6 +51,7 @@ type Tab =
   | "education"
   | "sections"
   | "contact"
+  | "inquiries"
   | "site"
   | "json";
 
@@ -677,6 +679,15 @@ export default function AdminEditor({
             </button>
 
             <button
+              className={`admin-tab-btn ${activeTab === "inquiries" ? "active" : ""}`}
+              onClick={() => setActiveTab("inquiries")}
+            >
+              <span className="admin-tab-inner">
+                <MessageSquare size={16} /> Inbox / Messages
+              </span>
+            </button>
+
+            <button
               className={`admin-tab-btn ${activeTab === "site" ? "active" : ""}`}
               onClick={() => setActiveTab("site")}
             >
@@ -772,6 +783,8 @@ export default function AdminEditor({
                 onChange={(c) => update("contact", c)}
               />
             )}
+
+            {activeTab === "inquiries" && <InquiriesViewer />}
 
             {activeTab === "site" && (
               <SiteEditor
@@ -2625,6 +2638,230 @@ function ContactEditor({
           Messages sent through the website contact form are also automatically stored in your MongoDB database in the <strong>inquiries</strong> collection.
         </p>
       </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------
+// 9.5 Inquiries & Messages Viewer
+// ----------------------------------------------------------------------
+type Inquiry = {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  createdAt: string;
+  read: boolean;
+};
+
+function InquiriesViewer() {
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  async function fetchInquiries() {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/admin/inquiries");
+      const data = (await res.json()) as { error?: string; inquiries?: Inquiry[] };
+      if (!res.ok) throw new Error(data.error || "Failed to load messages");
+      setInquiries(data.inquiries || []);
+    } catch (e: any) {
+      setError(e.message || "Failed to fetch inquiries");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchInquiries();
+  }, []);
+
+  async function deleteInquiry(id: string) {
+    if (!confirm("Are you sure you want to delete this message?")) return;
+    setDeletingId(id);
+    try {
+      const res = await fetch("/api/admin/inquiries", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error("Failed to delete message");
+      setInquiries((prev) => prev.filter((item) => item.id !== id));
+    } catch (e: any) {
+      alert(e.message);
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  return (
+    <div className="admin-panel-card">
+      <div
+        className="admin-panel-header"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+          gap: "12px",
+        }}
+      >
+        <div>
+          <h2>Contact Form Inbox ({inquiries.length})</h2>
+          <p>
+            All messages submitted through your portfolio contact form are automatically saved here in MongoDB.
+          </p>
+        </div>
+        <button
+          onClick={fetchInquiries}
+          disabled={loading}
+          className="btn secondary"
+          style={{ padding: "6px 14px", fontSize: "12px" }}
+        >
+          {loading ? "Refreshing..." : "Refresh Inbox"}
+        </button>
+      </div>
+
+      <div
+        className="admin-item-box"
+        style={{
+          marginBottom: "20px",
+          background: "rgba(182, 255, 105, 0.05)",
+          borderColor: "rgba(182, 255, 105, 0.25)",
+        }}
+      >
+        <h4 style={{ margin: "0 0 6px 0", fontSize: "14px", color: "var(--lime)" }}>
+          📬 Instant Gmail Forwarding (Optional Setup)
+        </h4>
+        <p style={{ margin: 0, fontSize: "13px", color: "var(--muted)", lineHeight: 1.6 }}>
+          All inquiries are already saved here in this dashboard. To also receive them directly in your <strong>v17vyshnavtv@gmail.com</strong> Gmail inbox:
+          <br />
+          1. Go to Google Account &rarr; Security &rarr; <strong>2-Step Verification</strong> &rarr; <strong>App Passwords</strong> (or visit <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noreferrer" style={{ color: "var(--lime)", textDecoration: "underline" }}>myaccount.google.com/apppasswords</a>).
+          <br />
+          2. Type <code>Portfolio</code> as the app name and click <strong>Create</strong> to get a 16-character code (e.g. <code>abcd efgh ijkl mnop</code>).
+          <br />
+          3. In your Vercel Project &rarr; <strong>Settings &rarr; Environment Variables</strong>, add <code>EMAIL_PASS</code> with that 16-character code, then <strong>Redeploy</strong>!
+        </p>
+      </div>
+
+      {loading ? (
+        <div style={{ padding: "36px", textAlign: "center", color: "var(--muted)" }}>
+          Loading messages from database...
+        </div>
+      ) : error ? (
+        <div
+          style={{
+            background: "rgba(255, 77, 77, 0.1)",
+            border: "1px solid rgba(255, 77, 77, 0.3)",
+            color: "#ff6b6b",
+            padding: "12px 16px",
+            borderRadius: "6px",
+            fontSize: "14px",
+          }}
+        >
+          {error}
+        </div>
+      ) : inquiries.length === 0 ? (
+        <div
+          style={{
+            padding: "48px 24px",
+            textAlign: "center",
+            color: "var(--muted)",
+            border: "1px dashed var(--line)",
+            borderRadius: "8px",
+          }}
+        >
+          <p style={{ margin: "0 0 4px 0", fontSize: "15px", color: "var(--text)" }}>
+            No messages received yet.
+          </p>
+          <small style={{ color: "var(--sub)" }}>
+            When someone submits your contact form, their inquiry will appear here instantly.
+          </small>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          {inquiries.map((inq) => (
+            <div
+              key={inq.id}
+              className="admin-item-box"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  flexWrap: "wrap",
+                  gap: "10px",
+                }}
+              >
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <strong style={{ fontSize: "15px", color: "var(--text)" }}>
+                      {inq.name}
+                    </strong>
+                    <span style={{ fontSize: "13px", color: "var(--lime)" }}>
+                      &lt;{inq.email}&gt;
+                    </span>
+                  </div>
+                  <div style={{ fontSize: "12px", color: "var(--sub)", marginTop: "3px" }}>
+                    {new Date(inq.createdAt).toLocaleString()}
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <a
+                    href={`mailto:${inq.email}?subject=Re: ${encodeURIComponent(inq.subject)}`}
+                    className="btn secondary"
+                    style={{ padding: "5px 12px", fontSize: "12px", textDecoration: "none" }}
+                  >
+                    Reply via Email
+                  </a>
+                  <button
+                    className="admin-icon-btn danger"
+                    style={{ padding: "5px 10px", fontSize: "12px" }}
+                    onClick={() => deleteInquiry(inq.id)}
+                    disabled={deletingId === inq.id}
+                    title="Delete message"
+                  >
+                    <Trash2 size={13} />
+                    {deletingId === inq.id ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
+              </div>
+
+              {inq.subject && (
+                <div style={{ fontSize: "13px", fontWeight: 600, color: "var(--text)" }}>
+                  Subject: <span style={{ color: "var(--muted)", fontWeight: 400 }}>{inq.subject}</span>
+                </div>
+              )}
+
+              <div
+                style={{
+                  background: "var(--panel2)",
+                  padding: "14px 16px",
+                  borderRadius: "6px",
+                  fontSize: "14px",
+                  lineHeight: 1.6,
+                  color: "var(--text)",
+                  whiteSpace: "pre-wrap",
+                  border: "1px solid var(--line)",
+                }}
+              >
+                {inq.message}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
