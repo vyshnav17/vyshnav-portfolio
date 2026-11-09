@@ -1,6 +1,7 @@
-import {cache} from "react";
+import { cache } from "react";
 import initial from "@/data/initial.json";
-import {type Content, validateDocument} from "@/data/schema";
+import { type Content, validateDocument } from "@/data/schema";
+import { getMongoDb } from "./mongodb";
 
 async function getWorkersEnv(): Promise<any> {
   try {
@@ -11,7 +12,7 @@ async function getWorkersEnv(): Promise<any> {
   }
 }
 
-// Optional Vercel KV / Upstash Redis persistence (no external dependencies, pure fetch)
+// Optional Vercel KV / Upstash Redis persistence
 async function getVercelKV(): Promise<{ version: number; content: Content } | null> {
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -54,11 +55,27 @@ async function setVercelKV(version: number, content: Content): Promise<boolean> 
 }
 
 export const readPortfolio = cache(async () => {
-  // 1. Try Vercel KV / Upstash if configured on Vercel
+  // 1. Try MongoDB Atlas if MONGODB_URI is configured
+  try {
+    const db = await getMongoDb();
+    if (db) {
+      const doc = await db.collection("portfolio").findOne({ _id: "main" as any });
+      if (doc && doc.document) {
+        return {
+          version: (doc.version as number) || 1,
+          content: doc.document as Content,
+        };
+      }
+    }
+  } catch (err) {
+    console.error("MongoDB read error:", err);
+  }
+
+  // 2. Try Vercel KV / Upstash if configured on Vercel
   const kvData = await getVercelKV();
   if (kvData) return kvData;
 
-  // 2. Try Cloudflare Workers D1 if running on Cloudflare
+  // 3. Try Cloudflare Workers D1 if running on Cloudflare
   try {
     const env = await getWorkersEnv();
     if (env && env.DB) {
@@ -74,7 +91,7 @@ export const readPortfolio = cache(async () => {
     }
   } catch {}
 
-  // 3. Fallback to initial.json
+  // 4. Default fallback to data/initial.json
   return { version: 0, content: initial as Content };
 });
 
@@ -88,10 +105,30 @@ export async function savePortfolio(document: Content) {
   const nextVersion = (current.version || 0) + 1;
   const docString = JSON.stringify(validated);
 
-  // 1. Save to Vercel KV / Upstash if configured
+  // 1. Save to MongoDB Atlas if MONGODB_URI is configured
+  try {
+    const db = await getMongoDb();
+    if (db) {
+      await db.collection("portfolio").updateOne(
+        { _id: "main" as any },
+        {
+          $set: {
+            document: validated,
+            version: nextVersion,
+            updatedAt: new Date(),
+          },
+        },
+        { upsert: true }
+      );
+    }
+  } catch (e) {
+    console.error("Failed to save to MongoDB Atlas:", e);
+  }
+
+  // 2. Save to Vercel KV / Upstash if configured
   await setVercelKV(nextVersion, validated);
 
-  // 2. Save to Cloudflare D1 if configured
+  // 3. Save to Cloudflare D1 if configured
   try {
     const env = await getWorkersEnv();
     if (env && env.DB) {
@@ -106,7 +143,7 @@ export async function savePortfolio(document: Content) {
     console.error("Failed to save to Cloudflare D1:", e);
   }
 
-  // 3. Also persist to data/initial.json if running in local Node environment
+  // 4. Also persist to data/initial.json if running in local Node environment
   if (typeof process !== "undefined" && process.release?.name === "node") {
     try {
       const fs = await import("node:fs/promises");
@@ -120,6 +157,17 @@ export async function savePortfolio(document: Content) {
 }
 
 export async function resetPortfolio() {
+  // 1. Reset in MongoDB Atlas
+  try {
+    const db = await getMongoDb();
+    if (db) {
+      await db.collection("portfolio").deleteOne({ _id: "main" as any });
+    }
+  } catch (e) {
+    console.error("Failed to reset in MongoDB Atlas:", e);
+  }
+
+  // 2. Reset in Vercel KV
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
   if (url && token) {
@@ -130,6 +178,7 @@ export async function resetPortfolio() {
     } catch {}
   }
 
+  // 3. Reset in Cloudflare D1
   try {
     const env = await getWorkersEnv();
     if (env && env.DB) {

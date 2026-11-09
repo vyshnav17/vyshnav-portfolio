@@ -26,6 +26,8 @@ import {
   Code,
   Lock,
   Unlock,
+  Eye,
+  EyeOff,
   X,
   FileCode,
   Sparkles,
@@ -72,6 +74,12 @@ export default function AdminEditor({
   const [repoSearch, setRepoSearch] = useState("");
   const [rawJsonText, setRawJsonText] = useState("");
   const [rawJsonError, setRawJsonError] = useState("");
+
+  // Password Authentication
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadTarget, setUploadTarget] = useState<
@@ -197,24 +205,39 @@ export default function AdminEditor({
     }
   }
 
-  // Owner authentication toggle
-  async function toggleAuth() {
-    const action = isOwnerState ? "signout" : "signin";
+  // Password Login & Logout handlers
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setIsLoggingIn(true);
+    setLoginError("");
     try {
       const res = await fetch("/api/admin/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action }),
+        body: JSON.stringify({ action: "login", password: loginPassword }),
       });
       const data = (await res.json()) as any;
-      setIsOwnerState(data.authenticated);
-      showToast(
-        data.authenticated ? "Signed in as Owner" : "Signed out",
-        "success"
-      );
+      if (!res.ok) throw new Error(data.error || "Login failed");
+      setIsOwnerState(true);
+      setLoginPassword("");
+      showToast("Logged in successfully!", "success");
     } catch (err: any) {
-      showToast("Auth update failed", "error");
+      setLoginError(err.message || "Incorrect password");
+    } finally {
+      setIsLoggingIn(false);
     }
+  }
+
+  async function handleLogout() {
+    try {
+      await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "logout" }),
+      });
+      setIsOwnerState(false);
+      showToast("Logged out successfully", "info");
+    } catch {}
   }
 
   // Apply Raw JSON
@@ -229,6 +252,164 @@ export default function AdminEditor({
     } catch (err: any) {
       setRawJsonError(err.message || "Invalid JSON schema");
     }
+  }
+
+  // If not authenticated, display the dedicated Password Login gate
+  if (!isOwnerState) {
+    return (
+      <div
+        className="admin-root"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "100vh",
+          padding: "24px",
+        }}
+      >
+        <div
+          className="admin-panel-card"
+          style={{
+            maxWidth: "420px",
+            width: "100%",
+            padding: "36px 32px",
+            textAlign: "center",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
+          }}
+        >
+          <div
+            style={{
+              width: "56px",
+              height: "56px",
+              borderRadius: "50%",
+              background: "rgba(182, 255, 105, 0.1)",
+              border: "1px solid rgba(182, 255, 105, 0.3)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 20px auto",
+              color: "var(--lime)",
+            }}
+          >
+            <Lock size={26} />
+          </div>
+          <h2 style={{ fontSize: "22px", fontWeight: 700, marginBottom: "8px" }}>
+            Portfolio Admin Login
+          </h2>
+          <p
+            style={{
+              color: "var(--muted)",
+              fontSize: "14px",
+              marginBottom: "24px",
+            }}
+          >
+            Enter your admin password to edit your portfolio content and settings.
+          </p>
+
+          <form onSubmit={handleLogin}>
+            <div
+              className="admin-form-group"
+              style={{ textAlign: "left", marginBottom: "18px" }}
+            >
+              <label className="admin-form-label">Admin Password</label>
+              <div style={{ position: "relative" }}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="admin-input"
+                  style={{ paddingRight: "40px" }}
+                  placeholder="Enter admin password..."
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  autoFocus
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: "absolute",
+                    right: "10px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none",
+                    border: "none",
+                    color: "var(--muted)",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            {loginError && (
+              <div
+                style={{
+                  background: "rgba(255, 77, 77, 0.12)",
+                  border: "1px solid rgba(255, 77, 77, 0.3)",
+                  color: "#ff6b6b",
+                  padding: "10px",
+                  borderRadius: "6px",
+                  fontSize: "13px",
+                  marginBottom: "16px",
+                  fontFamily: "var(--mono)",
+                }}
+              >
+                {loginError}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={isLoggingIn}
+              className="btn primary"
+              style={{
+                width: "100%",
+                justifyContent: "center",
+                padding: "12px",
+                fontSize: "15px",
+              }}
+            >
+              {isLoggingIn ? "Verifying..." : "Sign In to Admin"}
+            </button>
+          </form>
+
+          <div
+            style={{
+              marginTop: "24px",
+              paddingTop: "18px",
+              borderTop: "1px solid var(--line)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <a
+              href="/"
+              style={{
+                color: "var(--muted)",
+                fontSize: "13px",
+                textDecoration: "none",
+              }}
+            >
+              ← Back to Site
+            </a>
+            <span
+              style={{
+                fontSize: "11px",
+                fontFamily: "var(--mono)",
+                color: "var(--sub)",
+              }}
+            >
+              Protected Session
+            </span>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -270,19 +451,13 @@ export default function AdminEditor({
 
           <div className="admin-actions-group">
             <button
-              onClick={toggleAuth}
-              className="admin-icon-btn"
-              title={isOwnerState ? "Signed in as Owner" : "Click to sign in"}
-              style={{
-                gap: "6px",
-                padding: "6px 10px",
-                color: isOwnerState ? "var(--lime)" : "var(--muted)",
-              }}
+              onClick={handleLogout}
+              className="admin-icon-btn danger"
+              style={{ gap: "6px", padding: "6px 12px", fontSize: "13px" }}
+              title="Log out of admin"
             >
-              {isOwnerState ? <Unlock size={14} /> : <Lock size={14} />}
-              <span style={{ fontSize: "12px", fontFamily: "var(--mono)" }}>
-                {isOwnerState ? "Owner Active" : "Sign In"}
-              </span>
+              <Lock size={14} />
+              <span>Log Out</span>
             </button>
 
             <a
@@ -326,28 +501,6 @@ export default function AdminEditor({
 
       {/* Main Container */}
       <div className="container">
-        {!isOwnerState && (
-          <div className="admin-auth-overlay" style={{ marginTop: "20px" }}>
-            <p
-              style={{
-                fontSize: "15px",
-                marginBottom: "12px",
-                color: "var(--text)",
-              }}
-            >
-              You are viewing in preview mode. Click below to activate your
-              Owner session and publish changes.
-            </p>
-            <button
-              onClick={toggleAuth}
-              className="btn primary"
-              style={{ padding: "8px 20px" }}
-            >
-              <Unlock size={15} /> Authenticate as Owner
-            </button>
-          </div>
-        )}
-
         <div className="admin-layout-grid">
           {/* Navigation Sidebar */}
           <aside className="admin-sidebar">

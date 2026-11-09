@@ -1,27 +1,31 @@
-import {headers} from "next/headers";
+import { headers } from "next/headers";
+import { verifyAdminSession } from "./auth";
 
 const ownerEmail = "v17vyshnavtv@gmail.com";
 
-export function isOwner(headers: Headers | Awaited<ReturnType<typeof import("next/headers").headers>>) {
-  const id = headers.get("oai-authenticated-user-id");
-  const email = headers.get("oai-authenticated-user-email")?.toLowerCase();
-
-  // OpenAI Sites authenticated owner
-  if (id && (email === ownerEmail || (import.meta.env.DEV && id === "local_seedy" && email === "seedy@sites.test"))) {
+export function isOwner(
+  headers: Headers | Awaited<ReturnType<typeof import("next/headers").headers>>
+) {
+  // 1. Check signed password session cookie
+  const cookie = headers.get("cookie") || "";
+  if (verifyAdminSession(cookie)) {
     return true;
   }
 
-  // Cookie-based local/admin session
-  const cookie = headers.get("cookie") || "";
+  // 2. OpenAI Sites authenticated owner header
+  const id = headers.get("oai-authenticated-user-id");
+  const email = headers.get("oai-authenticated-user-email")?.toLowerCase();
   if (
-    cookie.includes("__sites_local_auth=1") ||
-    cookie.includes("admin_session=1") ||
-    cookie.includes("admin_authenticated=1")
+    id &&
+    (email === ownerEmail ||
+      (import.meta.env?.DEV &&
+        id === "local_seedy" &&
+        email === "seedy@sites.test"))
   ) {
     return true;
   }
 
-  // Optional bearer authorization
+  // 3. Optional bearer authorization
   const authHeader = headers.get("authorization");
   if (authHeader && authHeader === "Bearer vyshnav-admin-secret") {
     return true;
@@ -36,12 +40,22 @@ export async function ownerRequest() {
 
 export function checkMutation(req: Request) {
   if (!isOwner(req.headers)) {
-    return Response.json({ error: "Sign in with the portfolio owner account." }, { status: 403 });
+    return Response.json(
+      { error: "Unauthorized. Please log in with the admin password." },
+      { status: 401 }
+    );
   }
 
   const origin = req.headers.get("origin");
-  if (origin && (origin !== new URL(req.url).origin || req.headers.get("sec-fetch-site") === "cross-site")) {
-    return Response.json({ error: "Publish from the admin page on this site." }, { status: 403 });
+  if (
+    origin &&
+    (origin !== new URL(req.url).origin ||
+      req.headers.get("sec-fetch-site") === "cross-site")
+  ) {
+    return Response.json(
+      { error: "Publish from the admin page on this site." },
+      { status: 403 }
+    );
   }
 
   return null;
