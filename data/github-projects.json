@@ -1,0 +1,441 @@
+[
+  {
+    "name": "ACEhackthon",
+    "title": "JobReady.AI",
+    "category": "Career planning",
+    "summary": "A career-planning app with skill-gap assessments, learning roadmaps, and mock interviews.",
+    "url": "https://github.com/vyshnav17/ACEhackthon",
+    "language": "TypeScript",
+    "status": "source",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/ACEhackthon/blob/main/README.md"
+      },
+      {
+        "name": "client",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/ACEhackthon/tree/main/client"
+      },
+      {
+        "name": "server",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/ACEhackthon/tree/main/server"
+      }
+    ]
+  },
+  {
+    "name": "AI-based-Govt-Hospital-Smart-queue-and-Resource-Management-System",
+    "title": "SmartCare AI",
+    "category": "Healthcare",
+    "summary": "A Django hospital project connecting patient queues, bed availability, and triage across four role-based portals.",
+    "url": "https://github.com/vyshnav17/AI-based-Govt-Hospital-Smart-queue-and-Resource-Management-System",
+    "language": "HTML",
+    "status": "source",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/AI-based-Govt-Hospital-Smart-queue-and-Resource-Management-System/blob/main/README.md"
+      },
+      {
+        "name": "project_AI",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/AI-based-Govt-Hospital-Smart-queue-and-Resource-Management-System/tree/main/project_AI"
+      }
+    ],
+    "live": "https://ai-based-govt-hospital-smart-queue.vercel.app",
+    "caseStudy": "/work/hospital-system/"
+  },
+  {
+    "name": "AI-personalised-LMS",
+    "title": "AI-Personalised LMS",
+    "category": "Education",
+    "summary": "A React and NestJS learning platform with authentication, course management, and progress tracking.",
+    "url": "https://github.com/vyshnav17/AI-personalised-LMS",
+    "language": "TypeScript",
+    "status": "source",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/AI-personalised-LMS/blob/main/README.md"
+      },
+      {
+        "name": "backend",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/AI-personalised-LMS/tree/main/backend"
+      },
+      {
+        "name": "frontend",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/AI-personalised-LMS/tree/main/frontend"
+      }
+    ],
+    "live": "https://ai-personalised-lms.vercel.app",
+    "caseStudy": "/work/personalised-learning/"
+  },
+  {
+    "name": "CarRentalSystem",
+    "title": "Prestige Wheels Car Rental",
+    "category": "Transport",
+    "summary": "A Java web application with a vehicle catalogue, rental requests, and a MySQL database connection.",
+    "url": "https://github.com/vyshnav17/CarRentalSystem",
+    "language": "Java",
+    "status": "source",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/CarRentalSystem/blob/main/README.md"
+      },
+      {
+        "name": "com",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/CarRentalSystem/tree/main/com"
+      },
+      {
+        "name": "src",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/CarRentalSystem/tree/main/src"
+      }
+    ]
+  },
+  {
+    "name": "hayat-foodies-landing",
+    "title": "Hayat Foods Bakery",
+    "category": "Web development",
+    "summary": "A Kannur bakery website with a product catalogue, gallery, customer reviews, and contact features.",
+    "url": "https://github.com/vyshnav17/hayat-foodies-landing",
+    "language": "TypeScript",
+    "status": "source",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/hayat-foodies-landing/blob/main/README.md"
+      },
+      {
+        "name": "api",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/hayat-foodies-landing/tree/main/api"
+      },
+      {
+        "name": "prisma",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/hayat-foodies-landing/tree/main/prisma"
+      },
+      {
+        "name": "scripts",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/hayat-foodies-landing/tree/main/scripts"
+      },
+      {
+        "name": "src",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/hayat-foodies-landing/tree/main/src"
+      }
+    ],
+    "live": "https://hayat-foodies-landing.vercel.app",
+    "screenshot": "/work/hayat-foodies-landing.webp"
+  },
+  {
+    "name": "IBM6thsemProject-AI-powered-Resume-Analyser",
+    "title": "CV AI Insights",
+    "category": "Career tools",
+    "summary": "A résumé analyser and builder with keyword feedback, an analysis history dashboard, and PDF export.",
+    "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser",
+    "language": "JavaScript",
+    "status": "source",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/blob/main/README.md"
+      },
+      {
+        "name": "analyzer-service",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/analyzer-service"
+      },
+      {
+        "name": "api-gateway",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/api-gateway"
+      },
+      {
+        "name": "builder-service",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/builder-service"
+      },
+      {
+        "name": "frontend",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/frontend"
+      },
+      {
+        "name": "notification-service",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/notification-service"
+      },
+      {
+        "name": "report-service",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/IBM6thsemProject-AI-powered-Resume-Analyser/tree/main/report-service"
+      }
+    ]
+  },
+  {
+    "name": "WeddingInvitationDigital",
+    "title": "Digital Wedding Invitation",
+    "category": "Web development",
+    "summary": "An interactive wedding invitation with an animated entrance, music player, and RSVP backend.",
+    "url": "https://github.com/vyshnav17/WeddingInvitationDigital",
+    "language": "JavaScript",
+    "status": "source",
+    "files": [
+      {
+        "name": "backend",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/WeddingInvitationDigital/tree/main/backend"
+      },
+      {
+        "name": "frontend",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/WeddingInvitationDigital/tree/main/frontend"
+      }
+    ],
+    "live": "https://wedding-invitation-digital-pi.vercel.app",
+    "screenshot": "/work/weddinginvitationdigital.webp"
+  },
+  {
+    "name": "AI-powered-resume-analyser",
+    "title": "AI Résumé Analyser",
+    "category": "Career tools",
+    "summary": "A dedicated analysis service extracts résumé text from PDFs, runs AI analysis, and stores the results.",
+    "url": "https://github.com/vyshnav17/AI-powered-resume-analyser",
+    "language": "TypeScript",
+    "status": "source",
+    "files": [
+      {
+        "name": "analyzer-service",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/analyzer-service"
+      },
+      {
+        "name": "api-gateway",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/api-gateway"
+      },
+      {
+        "name": "frontend",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/frontend"
+      },
+      {
+        "name": "notification-service",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/notification-service"
+      },
+      {
+        "name": "report-service",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/report-service"
+      },
+      {
+        "name": "shared",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/shared"
+      },
+      {
+        "name": "user-service",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/AI-powered-resume-analyser/tree/main/user-service"
+      }
+    ]
+  },
+  {
+    "name": "teachConnect",
+    "title": "Teach Connect",
+    "category": "Recruitment",
+    "summary": "A Django recruitment portal for educators with candidate registration and Razorpay payment handling.",
+    "url": "https://github.com/vyshnav17/teachConnect",
+    "language": "HTML",
+    "status": "source",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/teachConnect/blob/main/README.md"
+      },
+      {
+        "name": "core",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/teachConnect/tree/main/core"
+      },
+      {
+        "name": "teachconnect",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/teachConnect/tree/main/teachconnect"
+      },
+      {
+        "name": "templates",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/teachConnect/tree/main/templates"
+      }
+    ]
+  },
+  {
+    "name": "jurismind-ai-summarizer-pdf",
+    "title": "Juris Mind PDF",
+    "category": "Legal technology",
+    "summary": "A legal document tool that extracts text from uploaded files for multilingual summaries and document Q&A.",
+    "url": "https://github.com/vyshnav17/jurismind-ai-summarizer-pdf",
+    "language": "TypeScript",
+    "status": "source",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/jurismind-ai-summarizer-pdf/blob/main/README.md"
+      },
+      {
+        "name": "src",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/jurismind-ai-summarizer-pdf/tree/main/src"
+      },
+      {
+        "name": "supabase",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/jurismind-ai-summarizer-pdf/tree/main/supabase"
+      }
+    ]
+  },
+  {
+    "name": "jurismind-ai-summarizer",
+    "title": "JurisMind AI Summarizer",
+    "category": "Legal technology",
+    "summary": "A legal document interface offering summaries, language options, and document chat.",
+    "url": "https://github.com/vyshnav17/jurismind-ai-summarizer",
+    "language": "TypeScript",
+    "status": "source",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/jurismind-ai-summarizer/blob/main/README.md"
+      },
+      {
+        "name": "src",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/jurismind-ai-summarizer/tree/main/src"
+      },
+      {
+        "name": "supabase",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/jurismind-ai-summarizer/tree/main/supabase"
+      }
+    ],
+    "upstream": "https://github.com/Santhosh-Kumar-R-S/jurismind-ai-summarizer"
+  },
+  {
+    "name": "NIPE",
+    "title": "NIPE Legal Summarizer",
+    "category": "Legal technology",
+    "summary": "A legal summarization interface that accepts uploaded documents or pasted text.",
+    "url": "https://github.com/vyshnav17/NIPE",
+    "language": null,
+    "status": "source",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/NIPE/blob/main/README.md"
+      },
+      {
+        "name": "server",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/NIPE/tree/main/server"
+      },
+      {
+        "name": "src",
+        "type": "dir",
+        "url": "https://github.com/vyshnav17/NIPE/tree/main/src"
+      }
+    ],
+    "upstream": "https://github.com/Santhosh-Kumar-R-S/NIPE"
+  },
+  {
+    "name": "React",
+    "title": "React Fundamentals",
+    "category": "Learning notes",
+    "summary": "Learning notes on React fundamentals, JSX, and core rendering methods.",
+    "url": "https://github.com/vyshnav17/React",
+    "language": null,
+    "status": "readme",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/React/blob/main/README.md"
+      }
+    ]
+  },
+  {
+    "name": "SalaryPredictorKNN",
+    "title": "Salary Predictor KNN",
+    "category": "Project outline",
+    "summary": "The README records the project title. The repository currently contains only that file.",
+    "url": "https://github.com/vyshnav17/SalaryPredictorKNN",
+    "language": null,
+    "status": "readme",
+    "files": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "url": "https://github.com/vyshnav17/SalaryPredictorKNN/blob/main/README.md"
+      }
+    ]
+  },
+  {
+    "name": "chatApp",
+    "title": "Chat App",
+    "category": "Repository",
+    "summary": "This repository has no committed files.",
+    "url": "https://github.com/vyshnav17/chatApp",
+    "language": null,
+    "status": "empty",
+    "files": []
+  },
+  {
+    "name": "HayatFoods",
+    "title": "Hayat Foods",
+    "category": "Repository",
+    "summary": "This repository has no committed files. The bakery website is in hayat-foodies-landing.",
+    "url": "https://github.com/vyshnav17/HayatFoods",
+    "language": null,
+    "status": "empty",
+    "files": []
+  },
+  {
+    "name": "IBM-college",
+    "title": "IBM College",
+    "category": "Repository",
+    "summary": "This repository has no committed files.",
+    "url": "https://github.com/vyshnav17/IBM-college",
+    "language": null,
+    "status": "empty",
+    "files": []
+  },
+  {
+    "name": "Job-Ready-AI",
+    "title": "Job Ready AI",
+    "category": "Repository",
+    "summary": "This repository has no committed files. The career-planning application is in ACEhackthon.",
+    "url": "https://github.com/vyshnav17/Job-Ready-AI",
+    "language": null,
+    "status": "empty",
+    "files": []
+  }
+]

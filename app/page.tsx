@@ -20,7 +20,8 @@ import {
 } from "lucide-react";
 import { projects, profile, stack, certificates } from "@/data/portfolio";
 import { siteUrl } from "@/data/site";
-import Sculpture from "@/components/Sculpture";
+import { HeroVisual } from "@/components/HeroVisual";
+import { repositories } from "@/data/repositories";
 import { ProjectVisual } from "@/components/ProjectVisual";
 import { Reveal, Timeline, Magnetic } from "@/components/Interactive";
 import { CopyEmail } from "@/components/Chrome";
@@ -67,6 +68,7 @@ export default function Home() {
             "@type": "Person",
             name: profile.name,
             url: siteUrl,
+            image: siteUrl + "/vyshnav-portrait-880.webp",
             jobTitle: "Aspiring Software Developer",
             sameAs: [profile.github, profile.linkedin],
             affiliation: {
@@ -136,7 +138,7 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <Sculpture />
+            <HeroVisual />
           </div>
           <div className="hero-foot">
             <a className="scroll-link" href="#work">
@@ -153,7 +155,10 @@ export default function Home() {
           <h2>
             Selected work<span>.</span>
           </h2>
-          <span className="mono range">2025 — 2026</span>
+          <a className="text-link archive-link" href="/work/">
+            All GitHub projects ({repositories.length}){" "}
+            <ArrowUpRight size={16} />
+          </a>
         </div>
         <div className="projects">
           {projects.map((p, i) => (
@@ -191,6 +196,14 @@ export default function Home() {
             </Reveal>
           ))}
         </div>
+        <a className="archive-strip" href="/work/">
+          <span>
+            <Github size={20} /> GitHub project archive
+          </span>
+          <span>
+            {repositories.length} repositories <ArrowUpRight size={17} />
+          </span>
+        </a>
       </section>
       <section id="about" className="section container ruled">
         <Label>About</Label>
